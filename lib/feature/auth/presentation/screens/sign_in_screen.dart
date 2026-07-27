@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:flutter/gestures.dart';
 
 import '../../../../app/asset_paths.dart';
 import '../../../shared/utils/validators.dart';
@@ -15,6 +16,13 @@ class _SignInScreenState extends State<SignInScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  late TapGestureRecognizer _signUpRecognizer;
+
+  @override
+  void initState() {
+    super.initState();
+    _signUpRecognizer = TapGestureRecognizer()..onTap = _onTapSignUp;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -110,27 +118,35 @@ class _SignInScreenState extends State<SignInScreen> {
                 ),
                ),
                const SizedBox(height: 20),
-               RichText(text:  TextSpan(
-                 text: 'Don\'t have an account? ',
-                 style: textTheme.bodyMedium,
-                 children: [
-                   TextSpan(
-                     text: 'Sign Up',
-                     style: textTheme.labelSmall?.copyWith(
-                       color: Colors.blue,
+               RichText(
+                 text: TextSpan(
+                   text: 'Don\'t have an account? ',
+                   style: textTheme.bodyMedium,
+                   children: [
+                     TextSpan(
+                       text: 'Sign Up',
+                       style: textTheme.labelSmall?.copyWith(
+                         color: Colors.blue,
+                       ),
+                       recognizer: _signUpRecognizer,
                      ),
-                   ),
-
-                 ],
-
-
-               ))
+                   ],
+                 ),
+               )
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _signUpRecognizer.dispose();
+    super.dispose();
   }
 
   void _onTapSignIn() {
@@ -144,5 +160,11 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   void _onTapForgotPassword() {
+  }
+
+  void _onTapSignUp() {
+    // Handle sign up tap - navigate or open a dialog
+    // Example: Navigator.pushNamed(context, '/sign_up');
+    print('Sign Up tapped');
   }
 }

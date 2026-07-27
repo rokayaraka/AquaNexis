@@ -89,7 +89,7 @@ class AppTheme {
       padding: const EdgeInsets.all(10),
       fixedSize: Size.fromWidth(double.maxFinite),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(5),
       ),
     ),
   );
@@ -97,9 +97,10 @@ class AppTheme {
     style:FilledButton.styleFrom(
       backgroundColor: AppColors.buttonColorDark,
       padding: const EdgeInsets.all(10),
+      foregroundColor: Colors.white,
       fixedSize: Size.fromWidth(double.maxFinite),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(5),
       ),
     ),
   );
@@ -108,7 +109,7 @@ class AppTheme {
     progressIndicatorTheme: const ProgressIndicatorThemeData(
       color: AppColors.themeColorDark,
     ),
-    brightness: Brightness.light,
+    brightness: Brightness.dark,
     scaffoldBackgroundColor: AppColors.themeColorDark,
     appBarTheme: AppBarTheme(
       backgroundColor: AppColors.themeColorDark,
@@ -186,30 +187,38 @@ class AppTheme {
   static final _inputDecorationThemeDark = InputDecorationThemeData(
     contentPadding: EdgeInsets.only(left: 16),
     enabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(5),
       borderSide: BorderSide(color: AppColors.borderPrimaryColor, width: 1),
     ),
     focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(5),
       borderSide: BorderSide(color: AppColors.borderPrimaryColor, width: 1),
     ),
     border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(5),
       borderSide: BorderSide(color: AppColors.borderPrimaryColor, width: 1),
     ),
     errorBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(5),
       borderSide: BorderSide(color: AppColors.errorColor, width: 1),
     ),
   );
   static final _inputDecorationThemeLight = InputDecorationThemeData(
     contentPadding: EdgeInsets.only(left: 16),
     enabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(5),
       borderSide: BorderSide(color: AppColors.borderPrimaryColor, width: 1),
     ),
     focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(5),
       borderSide: BorderSide(color: AppColors.borderPrimaryColor, width: 1),
     ),
     border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(5),
       borderSide: BorderSide(color: AppColors.borderPrimaryColor, width: 1),
     ),
     errorBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(5),
       borderSide: BorderSide(color: AppColors.errorColor, width: 1),
     ),
   );

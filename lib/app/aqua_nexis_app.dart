@@ -31,7 +31,7 @@ class _AquaNexisAppState extends State<AquaNexisApp> {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'Aqua Nexis',
-            theme: AppTheme.darkTheme,
+            theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
             themeMode: _themeModeProvider.themeMode,
             initialRoute: SplashScreen.routeName,
