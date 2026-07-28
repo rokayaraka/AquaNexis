@@ -40,6 +40,7 @@ dependencies:
   provider: ^6.1.5+1
   lottie: ^3.3.3
   shared_preferences: ^2.5.5
+  mobile_scanner: ^7.4.0
 
 dev_dependencies:
   flutter_test:
@@ -84,6 +85,7 @@ flutter:
     - family: Arthaus
       fonts:
         - asset: assets/fonts/Arthaus-Bold.ttf
+          weight: 700
           
   
   # For details regarding fonts from package dependencies,

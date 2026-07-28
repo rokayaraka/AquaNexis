@@ -1,8 +1,11 @@
+import 'package:aqua_nexis/feature/auth/presentation/screens/sign_up_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter/gestures.dart';
 
+import '../../../../app/app_colors.dart';
 import '../../../../app/asset_paths.dart';
+import '../../../home/presentation/screens/home_screen.dart';
 import '../../../shared/utils/validators.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -28,112 +31,118 @@ class _SignInScreenState extends State<SignInScreen> {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Form(
-          key: _formKey,
-          child: Padding(
-            padding: const .only(top: 200.0, left: 20.0, right: 20.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children:  [
-               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                Lottie.asset(
-                  AssetPaths.logo,
-                  width: 50,
-                  height: 50,
-                ),
-                const SizedBox(width: 10),
-                Text(
-                  'aquanexis',
-                  style: textTheme.titleLarge?.copyWith(
-                    fontFamily: 'Arthaus',
-                  ),
-                ),
-               ],),
-               const SizedBox(height: 20),
-               TextFormField(
-                  controller: _emailController,
-                    decoration:  InputDecoration(
-                      hintText: 'Email',
-                      hintStyle: textTheme.labelMedium,
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              child: Padding(
+                padding: const .symmetric(horizontal: 20.0, ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children:  [
+                   Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                    Lottie.asset(
+                      AssetPaths.logo,
+                      width: 50,
+                      height: 50,
                     ),
-                    validator: (String? value)=>Validators.validateEmail(value),
-                  ),
-                  const SizedBox(height: 20),
-                  TextFormField(
-                    controller: _passwordController,
-                    obscureText: true,
-                    
-                    decoration:  InputDecoration(
-                      suffixIcon: IconButton(
-                      icon:  Icon(Icons.visibility_off),
-                      onPressed: () {
-                        // Toggle password visibility
-                      },
-                    ),
-                      hintText: 'Password',
-                      hintStyle: textTheme.labelMedium,
-                    ),
-                    validator: (String? value)=>Validators.validatePassword(value),
-                  ),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: TextButton(
-                      onPressed: _onTapForgotPassword,
-                      child:  Text('Forgot Password'),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  FilledButton(
-                    onPressed: _onTapSignIn,
-                    child: const Text('Sign In'),
-                  
-               ),
-               const SizedBox(height: 8),
-               RichText(
-                text: TextSpan(
-                  text: 'By continuing you accept out  ',
-                  style: textTheme.bodyMedium,
-                  children: [
-                    TextSpan(
-                      text: 'Privacy Policy ',
-                      style: textTheme.labelSmall?.copyWith(
-                        color: Colors.blue,
+                    const SizedBox(width: 10),
+                    Text(
+                      'aquanexis',
+                      style: textTheme.titleLarge?.copyWith(
+                        fontFamily: 'Arthaus',
+                        fontSize: 50,
+                        color: AppColors.textColorDarkSecondary,
                       ),
                     ),
-                    TextSpan(
-                      text: 'and',
+                   ],),
+                   const SizedBox(height: 20),
+                   TextFormField(
+                      controller: _emailController,
+                        decoration:  InputDecoration(
+                          hintText: 'Email',
+                          hintStyle: textTheme.labelMedium,
+                        ),
+                        validator: (String? value)=>Validators.validateEmail(value),
+                      ),
+                      const SizedBox(height: 20),
+                      TextFormField(
+                        controller: _passwordController,
+                        obscureText: true,
+                        
+                        decoration:  InputDecoration(
+                          suffixIcon: IconButton(
+                          icon:  Icon(Icons.visibility_off),
+                          onPressed: () {
+                            // Toggle password visibility
+                          },
+                        ),
+                          hintText: 'Password',
+                          hintStyle: textTheme.labelMedium,
+                        ),
+                        validator: (String? value)=>Validators.validatePassword(value),
+                      ),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          onPressed: _onTapForgotPassword,
+                          child:  Text('Forgot Password',),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      FilledButton(
+                        onPressed: _onTapSignIn,
+                        child: const Text('Sign In'),
+                      
+                   ),
+                   const SizedBox(height: 8),
+                   RichText(
+                    text: TextSpan(
+                      text: 'By continuing you accept out  ',
                       style: textTheme.bodyMedium,
+                      children: [
+                        TextSpan(
+                          text: 'Privacy Policy ',
+                          style: textTheme.labelSmall?.copyWith(
+                            color: AppColors.textColorDarkSecondary,
+                          ),
+                        ),
+                        TextSpan(
+                          text: 'and',
+                          style: textTheme.bodyMedium,
+                        ),
+                        TextSpan(
+                          text: ' Terms of Service',
+                          style: textTheme.labelSmall?.copyWith(
+                            color: AppColors.textColorDarkSecondary,
+                          ),
+                        ),
+                      ],
                     ),
-                    TextSpan(
-                      text: ' Terms of Service',
-                      style: textTheme.labelSmall?.copyWith(
-                        color: Colors.blue,
-                      ),
-                    ),
+                   ),
+                   const SizedBox(height: 20),
+                   RichText(
+                     text: TextSpan(
+                       text: 'Don\'t have an account? ',
+                       style: textTheme.bodyMedium,
+                       children: [
+                         TextSpan(
+                           text: 'Sign Up',
+                           style: textTheme.labelSmall?.copyWith(
+                             color: AppColors.textColorDarkSecondary,
+                           ),
+                           recognizer: _signUpRecognizer,
+                         ),
+                       ],
+                     ),
+                   )
                   ],
                 ),
-               ),
-               const SizedBox(height: 20),
-               RichText(
-                 text: TextSpan(
-                   text: 'Don\'t have an account? ',
-                   style: textTheme.bodyMedium,
-                   children: [
-                     TextSpan(
-                       text: 'Sign Up',
-                       style: textTheme.labelSmall?.copyWith(
-                         color: Colors.blue,
-                       ),
-                       recognizer: _signUpRecognizer,
-                     ),
-                   ],
-                 ),
-               )
-              ],
+              ),
             ),
           ),
         ),
@@ -150,21 +159,20 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   void _onTapSignIn() {
-    if (_formKey.currentState?.validate() ?? false) {
-      // Perform sign-in logic here
-      final email = _emailController.text;
-      final password = _passwordController.text;
-      // You can call your authentication API or service here
-      print('Email: $email, Password: $password');
-    }
+    // if (_formKey.currentState?.validate() ?? false) {
+    //   // Perform sign-in logic here
+    //   final email = _emailController.text;
+    //   final password = _passwordController.text;
+    //   // You can call your authentication API or service here
+    //   print('Email: $email, Password: $password');
+    // }
+    Navigator.pushNamedAndRemoveUntil(context, HomeScreen.routeName, (route) => false);
   }
 
   void _onTapForgotPassword() {
   }
 
   void _onTapSignUp() {
-    // Handle sign up tap - navigate or open a dialog
-    // Example: Navigator.pushNamed(context, '/sign_up');
-    print('Sign Up tapped');
+    Navigator.pushNamedAndRemoveUntil(context, SignUpScreen.routeName, (route) => false);
   }
 }

@@ -7,6 +7,7 @@ class AppTheme {
   static ThemeData get darkTheme => _darkThemeData;
 
   static final ThemeData _lightThemeData = ThemeData(
+    fontFamily: 'Arthaus',
     colorSchemeSeed: AppColors.themeColorLight,
     progressIndicatorTheme: const ProgressIndicatorThemeData(
       color: AppColors.themeColorLight,
@@ -105,6 +106,7 @@ class AppTheme {
     ),
   );
   static final ThemeData _darkThemeData = ThemeData(
+    fontFamily: 'Arthaus',
     colorSchemeSeed: AppColors.themeColorDark,
     progressIndicatorTheme: const ProgressIndicatorThemeData(
       color: AppColors.themeColorDark,
@@ -121,7 +123,7 @@ class AppTheme {
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
         padding: const EdgeInsets.all(0),
-        foregroundColor: Colors.blue,
+        foregroundColor: AppColors.textColorDarkSecondary,
         textStyle: TextStyle(
           fontSize: AppConstaints.bodyMedium,
           
