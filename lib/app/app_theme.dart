@@ -12,6 +12,11 @@ class AppTheme {
     progressIndicatorTheme: const ProgressIndicatorThemeData(
       color: AppColors.themeColorLight,
     ),
+    cardTheme: CardThemeData(
+      color: AppColors.cardColorLight,
+      shadowColor: AppColors.cardColorDark,
+      elevation: 4,
+    ),
     scaffoldBackgroundColor: AppColors.themeColorLight,
     appBarTheme: AppBarTheme(
       backgroundColor: AppColors.themeColorLight,
@@ -110,6 +115,11 @@ class AppTheme {
     colorSchemeSeed: AppColors.themeColorDark,
     progressIndicatorTheme: const ProgressIndicatorThemeData(
       color: AppColors.themeColorDark,
+    ),
+    cardTheme: CardThemeData(
+      color: AppColors.cardColorDark,
+      shadowColor: AppColors.cardColorLight,
+      elevation: 4,
     ),
     brightness: Brightness.dark,
     scaffoldBackgroundColor: AppColors.themeColorDark,
