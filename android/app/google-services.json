@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "890430832403",
+    "project_id": "aquanexis-7d862",
+    "storage_bucket": "aquanexis-7d862.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:890430832403:android:b6c35328f079d8681364e6",
+        "android_client_info": {
+          "package_name": "com.example.aqua_nexis"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbSqRM2S6YbMPHbfJECdCs4Z4AVp6feVA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
