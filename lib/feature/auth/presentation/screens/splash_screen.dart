@@ -1,8 +1,6 @@
 import 'package:aqua_nexis/feature/auth/presentation/screens/sign_in_screen.dart';
+import 'package:aqua_nexis/feature/auth/presentation/widgets/logo_animation.dart';
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
-
-import '../../../../app/asset_paths.dart';
 import '../../../shared/widgets/customed_progress_indecator.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -31,14 +29,11 @@ class _SplashScreenState extends State<SplashScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
+            spacing: 200,
             children: [
-              Lottie.asset(
-                AssetPaths.splashAnimation,
-                fit: BoxFit.fill,
-                height: 400,
-                width: 400,
-              ),
-              const SizedBox(height: 40),
+              Spacer(),
+              LogoAnimation(width: MediaQuery.of(context).size.width*.75 ),
+              
               CustomedProgressIndecator(),
             ],
           ),

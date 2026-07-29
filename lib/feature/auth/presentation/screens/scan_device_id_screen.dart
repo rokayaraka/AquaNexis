@@ -38,20 +38,28 @@ class _ScanDeviceIdScreenState extends State<ScanDeviceIdScreen> {
           },
         ),
       ),
-      body: MobileScanner(
-        
-        controller: _controller,
-        onDetect: (result) {
-          if (_didReturnValue) return;
-
-          final value = result.barcodes.first.rawValue;
-          if (value == null || value.isEmpty) return;
-
-          _didReturnValue = true;
-          _controller.stop();
-          Navigator.pop(context, value);
-        },
-        tapToFocus: true,
+      body: Center(
+        child: SizedBox(
+          height: 300,
+          width: 300,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: MobileScanner(
+              controller: _controller,
+              onDetect: (result) {
+                if (_didReturnValue) return;
+            
+                final value = result.barcodes.first.rawValue;
+                if (value == null || value.isEmpty) return;
+            
+                _didReturnValue = true;
+                _controller.stop();
+                Navigator.pop(context, value);
+              },
+              tapToFocus: true,
+            ),
+          ),
+        ),
       ),
     );
   }
