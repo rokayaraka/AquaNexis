@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../device_setup/presentation/screens/device_setup_screen.dart';
+
 
 
 class DeviceSetupCard extends StatefulWidget {
@@ -45,5 +47,6 @@ class _DeviceSetupCardState extends State<DeviceSetupCard> {
   }
 
   void _onTap() {
+    Navigator.pushNamed(context, DeviceSetupScreen.routeName);
   }
 }
