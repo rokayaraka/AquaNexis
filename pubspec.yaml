@@ -47,6 +47,11 @@ dependencies:
   firebase_auth: ^6.5.6
   percent_indicator: ^4.2.5
   webview_flutter: ^4.14.1
+  network_info_plus: ^8.2.1
+  permission_handler: ^12.0.3
+  # wifi_connector: ^2.0.0
+
+
 
 dev_dependencies:
   flutter_test:
