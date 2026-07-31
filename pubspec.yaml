@@ -49,6 +49,7 @@ dependencies:
   webview_flutter: ^4.14.1
   network_info_plus: ^8.2.1
   permission_handler: ^12.0.3
+  flutter_blue_plus: ^2.3.11
   # wifi_connector: ^2.0.0
 
 

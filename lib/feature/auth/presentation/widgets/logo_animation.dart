@@ -14,7 +14,6 @@ class _LogoAnimationState extends State<LogoAnimation> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: widget.width,
       child: DefaultTextStyle(
         textAlign: TextAlign.center,
         style: const TextStyle(fontSize: 60.0, fontFamily: 'Arthaus', color: AppColors.textColorDarkSecondary),
