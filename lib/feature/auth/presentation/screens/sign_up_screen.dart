@@ -35,6 +35,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         child: Center(
           child: SingleChildScrollView(
             child: Form(
+              autovalidateMode: .onUserInteraction,
               key: _formKey,
               child: Padding(
                 padding: const .symmetric(horizontal: 20.0),
@@ -192,7 +193,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
     _deviceIdController.text = scannedDeviceId;
   });
   }
-
   void _onTapSignUp() {
   }
   @override
@@ -213,4 +213,4 @@ class _SignUpScreenState extends State<SignUpScreen> {
       (route) => false,
     );
   }
-}
+} 

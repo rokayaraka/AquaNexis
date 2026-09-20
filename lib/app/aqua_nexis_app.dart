@@ -19,7 +19,7 @@ class _AquaNexisAppState extends State<AquaNexisApp> {
     super.initState();
     _themeModeProvider.setDefaultThemeMode();
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return MultiProvider(

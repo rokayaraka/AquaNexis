@@ -22,12 +22,15 @@ class DeviceSetupScreen extends StatefulWidget {
 class _DeviceSetupScreenState extends State<DeviceSetupScreen> {
   final List<ScanResult> _scanResults = [];
   StreamSubscription<List<ScanResult>>? _scanResultsSubscription;
+  StreamSubscription<List<int>>? _statusSubscription;
   bool _isScanning = false;
   DateTime? _lastScanStartedAt;
   BluetoothCharacteristic? provisionCharacteristic;
+  BluetoothCharacteristic? statusCharacteristic;
+  Completer<String?>? _statusResponseCompleter;
   static const String serviceUUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";
-
   static const String provisionUUID = "beb54850-36e1-4688-b7f5-ea07361b26b0";
+  static const String statusUUID = "beb54841-36e1-4688-b7f5-ea07361b26a4";
   static const Duration _scanCooldown = Duration(seconds: 8);
   String _statusMessage =
       'Tap Scan devices to discover nearby BLE peripherals.';
@@ -71,6 +74,7 @@ class _DeviceSetupScreenState extends State<DeviceSetupScreen> {
   @override
   void dispose() {
     _scanResultsSubscription?.cancel();
+    _statusSubscription?.cancel();
     if (_isScanning) {
       FlutterBluePlus.stopScan();
     }
@@ -89,9 +93,17 @@ class _DeviceSetupScreenState extends State<DeviceSetupScreen> {
 
       log("Connected");
 
+      final connectionState = await device.connectionState.first;
+      log('BLE connection state after connect: $connectionState');
+
       await discoverServices(device);
 
-      await sendProvision(credentials.ssid, credentials.password);
+      await sendProvision(
+        credentials.ssid,
+        credentials.password,
+        credentials.deviceId,
+        credentials.server,
+      );
     } catch (e) {
       log(e.toString());
     }
@@ -117,6 +129,24 @@ class _DeviceSetupScreenState extends State<DeviceSetupScreen> {
               provisionCharacteristic = c;
               log("✅ Found Provision Characteristic!");
             }
+
+            if (c.uuid.toString().toLowerCase() == statusUUID) {
+              statusCharacteristic = c;
+              await statusCharacteristic!.setNotifyValue(true);
+
+              _statusSubscription?.cancel();
+              _statusSubscription = statusCharacteristic!.onValueReceived.listen((value) {
+                final response = utf8.decode(value).trim();
+                log('Device status response: $response');
+
+                if (_statusResponseCompleter != null &&
+                    !_statusResponseCompleter!.isCompleted) {
+                  _statusResponseCompleter!.complete(response);
+                }
+              });
+
+              log("✅ Found Status Characteristic!");
+            }
           }
         }
       }
@@ -124,19 +154,27 @@ class _DeviceSetupScreenState extends State<DeviceSetupScreen> {
       if (provisionCharacteristic == null) {
         log("❌ Provision characteristic NOT found");
       }
+
+      if (statusCharacteristic == null) {
+        log("⚠️ Status characteristic not found. Please set statusUUID to your device's notify characteristic.");
+      }
     } catch (e) {
       log("❌ Error discovering services: $e");
     }
   }
 
-  Future<void> sendProvision(String ssid, String password) async {
+  Future<void> sendProvision(
+    String ssid,
+    String password,
+    String? deviceId,
+    String? server,
+  ) async {
     if (provisionCharacteristic == null) {
       log("❌ Provision Characteristic not found");
       return;
     }
 
     try {
-      // Debug: Check characteristic properties
       log("🔍 Characteristic UUID: ${provisionCharacteristic!.uuid}");
       log("🔍 Properties: ${provisionCharacteristic!.properties}");
       log("🔍 Can Write: ${provisionCharacteristic!.properties.write}");
@@ -144,22 +182,88 @@ class _DeviceSetupScreenState extends State<DeviceSetupScreen> {
       final payload = {
         "ssid": ssid,
         "password": password,
-        "deviceId": "AQX001",
-        "server": "https://your-django-server.com",
+        "deviceId": deviceId ?? "default-device-id",
+        "server": server ?? "https://your-django-server.com",
       };
 
       final jsonString = jsonEncode(payload);
       log("📤 Sending: $jsonString");
 
-      // Important: Use withoutResponse for faster writing
+      if (mounted) {
+        setState(() {
+          _statusMessage = 'Sending Wi-Fi credentials to the device...';
+        });
+      }
+
       await provisionCharacteristic!.write(
         utf8.encode(jsonString),
-        withoutResponse: true, // Add this!
+        withoutResponse: true,
       );
 
       log("✅ Provision Sent Successfully");
+
+      final response = await _waitForStatusResponse(
+        timeout: const Duration(seconds: 20),
+      );
+      
+      if (response == null) {
+        log("⚠️ No device status response received within timeout.");
+        if (mounted) {
+          setState(() {
+            _statusMessage = 'Credentials sent, but the device did not confirm success.';
+          });
+        }
+        return;
+      }
+
+      if (response.toLowerCase().contains('success')) {
+        log("✅ Device confirmed Wi-Fi connection success.");
+        if (mounted) {
+          setState(() {
+            _statusMessage = 'Device connected to the Wi-Fi successfully.';
+          });
+         
+        }
+      } else {
+        log("❌ Device reported failure: $response");
+        if (mounted) {
+          setState(() {
+            _statusMessage = 'Device reported a Wi-Fi connection failure.';
+          });
+        }
+      }
+
     } catch (e) {
       log("❌ Error sending provision: $e");
+    }finally {
+      if(mounted) {
+       ScaffoldMessenger.of(context).showSnackBar(
+
+             SnackBar(content: Text(_statusMessage),
+             duration: Duration(seconds: 3),
+             ),
+
+          );
+      }
+    }
+  }
+
+  Future<String?> _waitForStatusResponse({
+    required Duration timeout,
+  }) async {
+    if (statusCharacteristic == null) {
+      return null;
+    }
+
+    _statusResponseCompleter = Completer<String?>();
+
+    try {
+      return await _statusResponseCompleter!.future.timeout(
+        timeout,
+        onTimeout: () => null,
+      );
+    } finally {
+      _statusResponseCompleter = null;
     }
   }
 
@@ -268,7 +372,7 @@ class _DeviceSetupScreenState extends State<DeviceSetupScreen> {
       appBar: AppBar(
         backgroundColor: const Color(0xFF0C3035),
         title: Text(
-          'Nearby BLE Devices',
+          'Device Setup',
           style: textTheme.titleMedium?.copyWith(
             fontSize: 30,
             color: AppColors.textColorDarkSecondary,
@@ -286,65 +390,67 @@ class _DeviceSetupScreenState extends State<DeviceSetupScreen> {
       ),
       body: RefreshIndicator(
         onRefresh: _startScan,
-        child: ListView(
-          padding: const EdgeInsets.all(20),
-          children: [
-            Text(
-              'Use BLE to discover nearby devices and identify the AquaNexis unit before moving to setup.',
-              style: textTheme.bodyMedium?.copyWith(
-                color: AppColors.textColorDarkSecondary,
-              ),
-            ),
-            const SizedBox(height: 16),
-            _StatusCard(
-              message: _statusMessage,
-              isScanning: _isScanning,
-              onRefresh: _startScan,
-            ),
-            const SizedBox(height: 16),
-            if (_scanResults.isEmpty)
-              Padding(
-                padding: const EdgeInsets.only(top: 24),
-                child: Center(
-                  child: Text(
-                    _isScanning
-                        ? 'Looking for devices nearby...'
-                        : 'Pull to refresh or tap Scan devices.',
-                    style: textTheme.bodyMedium?.copyWith(
-                      color: AppColors.textColorDarkSecondary,
-                    ),
-                  ),
+        child: SafeArea(
+          child: ListView(
+            padding: const EdgeInsets.all(20),
+            children: [
+              Text(
+                'Use BLE to discover nearby devices and identify the AquaNexis unit before moving to setup.',
+                style: textTheme.bodyMedium?.copyWith(
+                  color: AppColors.textColorDarkSecondary,
                 ),
-              )
-            else
-              ..._scanResults.map((result) {
-                final deviceName = result.advertisementData.advName.isNotEmpty
-                    ? result.advertisementData.advName
-                    : 'Unknown device';
-
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: Card(
-                    child: ListTile(
-                      leading: const Icon(Icons.bluetooth_searching),
-                      title: Text(deviceName),
-                      subtitle: Text(
-                        'ID: ${result.device.remoteId}\nRSSI: ${result.rssi}',
+              ),
+              const SizedBox(height: 16),
+              _StatusCard(
+                message: _statusMessage,
+                isScanning: _isScanning,
+                onRefresh: _startScan,
+              ),
+              const SizedBox(height: 16),
+              if (_scanResults.isEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(top: 24),
+                  child: Center(
+                    child: Text(
+                      _isScanning
+                          ? 'Looking for devices nearby...'
+                          : 'Pull to refresh or tap Scan devices.',
+                      style: textTheme.bodyMedium?.copyWith(
+                        color: AppColors.textColorDarkSecondary,
                       ),
-                      isThreeLine: true,
-
-                      onTap: () => _onTap(result.device),
                     ),
                   ),
-                );
-              }),
-            const SizedBox(height: 24),
-            FilledButton.icon(
-              onPressed: _isScanning ? null : _startScan,
-              icon: Icon(_isScanning ? Icons.sync : Icons.search),
-              label: Text(_isScanning ? 'Scanning...' : 'Scan devices'),
-            ),
-          ],
+                )
+              else
+                ..._scanResults.map((result) {
+                  final deviceName = result.advertisementData.advName.isNotEmpty
+                      ? result.advertisementData.advName
+                      : 'Unknown device';
+          
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: Card(
+                      child: ListTile(
+                        leading: const Icon(Icons.bluetooth_searching),
+                        title: Text(deviceName),
+                        subtitle: Text(
+                          'ID: ${result.device.remoteId}\nRSSI: ${result.rssi}',
+                        ),
+                        isThreeLine: true,
+          
+                        onTap: () => _onTap(result.device),
+                      ),
+                    ),
+                  );
+                }),
+              const SizedBox(height: 24),
+              FilledButton.icon(
+                onPressed: _isScanning ? null : _startScan,
+                icon: Icon(_isScanning ? Icons.sync : Icons.search),
+                label: Text(_isScanning ? 'Scanning...' : 'Scan devices'),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -355,8 +461,10 @@ class _DeviceSetupScreenState extends State<DeviceSetupScreen> {
       
       context: context,
       barrierDismissible: false,
+
       builder: (context) {
         return Dialog(
+          
           insetPadding: const EdgeInsets.all(16),
           child: const AquaNexisWifiConnection(),
         );

@@ -9,6 +9,13 @@ class AppTheme {
   static final ThemeData _lightThemeData = ThemeData(
     fontFamily: 'Arthaus',
     colorSchemeSeed: AppColors.themeColorLight,
+    snackBarTheme: SnackBarThemeData(
+      backgroundColor: AppColors.buttonColorLight,
+      contentTextStyle: TextStyle(
+        color: AppColors.textColorLight,
+        fontSize: AppConstaints.bodyMedium,
+      ),
+    ),
     progressIndicatorTheme: const ProgressIndicatorThemeData(
       color: AppColors.themeColorLight,
     ),
@@ -113,6 +120,13 @@ class AppTheme {
   static final ThemeData _darkThemeData = ThemeData(
     fontFamily: 'Arthaus',
     colorSchemeSeed: AppColors.themeColorDark,
+    snackBarTheme: SnackBarThemeData(
+      backgroundColor: AppColors.textColorDark,
+      contentTextStyle: TextStyle(
+        color: AppColors.themeColorLight,
+        fontSize: AppConstaints.bodyMedium,
+      ),
+    ),
     progressIndicatorTheme: const ProgressIndicatorThemeData(
       color: AppColors.themeColorDark,
     ),

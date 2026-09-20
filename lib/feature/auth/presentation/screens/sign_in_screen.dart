@@ -36,6 +36,7 @@ class _SignInScreenState extends State<SignInScreen> {
           child: SingleChildScrollView(
             child: Form(
               key: _formKey,
+              autovalidateMode: .onUserInteraction,
               child: Padding(
                 padding: const .symmetric(horizontal: 20.0, ),
                 child: Column(
@@ -157,7 +158,7 @@ class _SignInScreenState extends State<SignInScreen> {
     _signUpRecognizer.dispose();
     super.dispose();
   }
-
+ 
   void _onTapSignIn() {
     // if (_formKey.currentState?.validate() ?? false) {
     //   // Perform sign-in logic here
