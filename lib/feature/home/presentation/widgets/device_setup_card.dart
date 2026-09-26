@@ -7,8 +7,10 @@ import '../../../device_setup/presentation/screens/device_setup_screen.dart';
 class DeviceSetupCard extends StatefulWidget {
   const DeviceSetupCard({
     super.key,
+    required this.deviceStatus,
 
   });
+  final bool deviceStatus;
 
   @override
   State<DeviceSetupCard> createState() => _DeviceSetupCardState();
@@ -19,7 +21,7 @@ class _DeviceSetupCardState extends State<DeviceSetupCard> {
   Widget build(BuildContext context) {
 
     return GestureDetector(
-      onTap: _onTap,
+      onTap: widget.deviceStatus ? _onTap : null,
       child: Card(
         child: Center(
           child:  Column(
@@ -37,6 +39,15 @@ class _DeviceSetupCardState extends State<DeviceSetupCard> {
                 color: Colors.cyan,
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              widget.deviceStatus ? "Device is online" : "Device is offline",
+              style: TextStyle(
+                color: widget.deviceStatus ? const Color.fromARGB(255, 215, 252, 84) : Colors.red,
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
               ),
             ),
           ],

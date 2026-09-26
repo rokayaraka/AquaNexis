@@ -6,9 +6,9 @@ import '../../../../app/app_colors.dart';
 class TemperatureCard extends StatefulWidget {
   const TemperatureCard({
     super.key,
-
+    required this.temperature,
   });
-
+  final double temperature;
   @override
   State<TemperatureCard> createState() => _TemperatureCardState();
 }
@@ -27,7 +27,7 @@ class _TemperatureCardState extends State<TemperatureCard> {
             CircularPercentIndicator(
               radius: 50,
               lineWidth: 12,
-              percent: 0.5,
+              percent: (widget.temperature / 100).clamp(0.0, 1.0),
               animation: true,
               circularStrokeCap: CircularStrokeCap.round,
               progressColor: Colors.cyan,
@@ -35,7 +35,7 @@ class _TemperatureCardState extends State<TemperatureCard> {
               arcType: ArcType.FULL,
               arcBackgroundColor: Colors.white24,
               center:  Text(
-                "50 °C",
+                "${widget.temperature.toStringAsFixed(1)} °C",
                 style: textTheme.labelLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,

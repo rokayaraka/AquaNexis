@@ -5,6 +5,8 @@ import 'package:aqua_nexis/feature/auth/presentation/screens/splash_screen.dart'
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../feature/home/presentation/providers/sensor_provider.dart';
+
 class AquaNexisApp extends StatefulWidget {
   const AquaNexisApp({super.key});
 
@@ -19,13 +21,14 @@ class _AquaNexisAppState extends State<AquaNexisApp> {
     super.initState();
     _themeModeProvider.setDefaultThemeMode();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: _themeModeProvider),
-        ],
+        ChangeNotifierProvider(create: (_) => SensorProvider()..connect()),
+      ],
       child: Consumer<ThemeModeProvider>(
         builder: (context, _, _) {
           return MaterialApp(
@@ -37,7 +40,7 @@ class _AquaNexisAppState extends State<AquaNexisApp> {
             initialRoute: SplashScreen.routeName,
             onGenerateRoute: AppRoutes.onGenerateRoute,
           );
-        }
+        },
       ),
     );
   }

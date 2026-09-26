@@ -6,8 +6,9 @@ import '../../../../app/app_colors.dart';
 class TurbidityCard extends StatefulWidget {
   const TurbidityCard({
     super.key,
-
+    required this.turbidity,
   });
+  final double turbidity;
 
   @override
   State<TurbidityCard> createState() => _TurbidityCardState();
@@ -19,6 +20,7 @@ class _TurbidityCardState extends State<TurbidityCard> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final double  percent = (widget.turbidity -0)/(5000-0);
     return GestureDetector(
       onTap: _onTap,
       child: Card(
@@ -29,7 +31,7 @@ class _TurbidityCardState extends State<TurbidityCard> {
             CircularPercentIndicator(
               radius: 50,
               lineWidth: 12,
-              percent: 0.5,
+              percent: percent,
               animation: true,
               circularStrokeCap: CircularStrokeCap.round,
               progressColor: Colors.cyan,
@@ -37,7 +39,7 @@ class _TurbidityCardState extends State<TurbidityCard> {
               arcType: ArcType.FULL,
               arcBackgroundColor: Colors.white24,
               center:  Text(
-                "50",
+                "${widget.turbidity.toStringAsFixed(1)}",
                 style: textTheme.labelLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,

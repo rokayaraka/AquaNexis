@@ -1,7 +1,9 @@
 import 'package:aqua_nexis/feature/home/presentation/widgets/feeding.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../app/app_colors.dart';
+import '../providers/sensor_provider.dart';
 import '../widgets/device_setup_card.dart';
 import '../widgets/food_level_card.dart';
 import '../widgets/monitor_card.dart';
@@ -9,6 +11,7 @@ import '../widgets/ph_card.dart';
 import '../widgets/settings_card.dart';
 import '../widgets/temperature_card.dart';
 import '../widgets/turbidity_card.dart';
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,8 +21,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
   @override
   Widget build(BuildContext context) {
+    final sensor=context.watch<SensorProvider>();
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
       appBar: AppBar(
@@ -57,26 +62,31 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: SafeArea(
-        child: GridView(
-          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 40.0),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 20,
-            childAspectRatio: 1.0,
-          ),
-          children: const [
-            PhCard(),
-            TurbidityCard(),
-            TemperatureCard(),
-            FoodLevelCard(),
-            MonitorCard(),
-            DeviceSetupCard(),
-            FeedingCard( ),
-            SettingsCard(),
-            
-          ],
-          ),
+        child: RefreshIndicator(
+          onRefresh: () async {
+            await sensor.refreshConnection();
+          },
+          child: GridView(
+            padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 40.0),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 20,
+              childAspectRatio: 1.0,
+            ),
+            children: [
+              const PhCard(),
+               TurbidityCard(turbidity: sensor.turbidityRaw??0.0,),
+               TemperatureCard(temperature: sensor.temperature??0.0,),
+              const FoodLevelCard(),
+              const MonitorCard(),
+              DeviceSetupCard(deviceStatus: sensor.status == 'online',),
+              const FeedingCard( ),
+              const SettingsCard(),
+              
+            ],
+            ),
+        ),
       ),
     );
   }
