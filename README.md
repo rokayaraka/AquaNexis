@@ -63,7 +63,7 @@ Users can monitor aquarium conditions, receive fish health alerts, view fish beh
 
 | Technology | Purpose |
 |---|---|
-| Flutter | Mobile application development |
+| Flutter 3.38.5 | Mobile application development |
 | Dart | Programming language |
 | ESP32 | IoT device control |
 | AI / Computer Vision | Fish behavior analysis |
