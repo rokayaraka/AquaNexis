@@ -21,7 +21,7 @@ class _DeviceSetupCardState extends State<DeviceSetupCard> {
   Widget build(BuildContext context) {
 
     return GestureDetector(
-      onTap: widget.deviceStatus ? _onTap : null,
+      onTap: !widget.deviceStatus ? _onTap : null,
       child: Card(
         child: Center(
           child:  Column(

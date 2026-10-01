@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import '../feature/auth/presentation/screens/scan_device_id_screen.dart';
 import '../feature/device_setup/presentation/screens/device_setup_screen.dart';
 import '../feature/home/presentation/screens/home_screen.dart';
+import '../feature/monitoring/presentation/screens/live_monitoring.dart';
 
 class AppRoutes {
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
@@ -24,6 +25,8 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const HomeScreen());
       case DeviceSetupScreen.routeName:
         return MaterialPageRoute(builder: (_) => const DeviceSetupScreen());
+      case LiveMonitoring.routeName:
+        return MaterialPageRoute(builder: (_) => const LiveMonitoring());
       default:
         return MaterialPageRoute(builder: (_) => const SizedBox());
     }

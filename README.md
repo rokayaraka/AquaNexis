@@ -102,8 +102,8 @@ The AquaNexis system combines a Flutter mobile application, AI-based fish monito
               ┌──────────────┴──────────────┐
               ▼                             ▼
    ┌────────────────────┐       ┌────────────────────┐
-   │ Flutter Mobile App  │       │   ESP32 IoT System │
-   │ Monitoring & Alerts │       │ Sensors & Feeder   │
+   │ Flutter Mobile App                     │       │   ESP32 IoT System                      │ 
+   │ Monitoring & Alerts                   │       │ Sensors & Feeder                        │
    └────────────────────┘       └────────────────────┘
 ```
 

@@ -2,8 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:typed_data';
-
 import 'package:web_socket_channel/web_socket_channel.dart';
+
+import '../../../app/urls.dart';
 
 class WebSocketService {
   WebSocketChannel? _channel;
@@ -28,8 +29,7 @@ class WebSocketService {
       return;
     }
 
-    const uri = 'ws://192.168.0.113:8000/ws/device/esp_p4_001/'
-        '?role=viewer&token=f5c105170a2d7b28b5be1fd77cec4fb58225d72f';
+     String uri = Urls.webSocketUrl('esp_p4_001', 'f5c105170a2d7b28b5be1fd77cec4fb58225d72f');
 
     _channel = WebSocketChannel.connect(Uri.parse(uri));
 

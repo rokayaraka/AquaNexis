@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../../../monitoring/presentation/screens/live_monitoring.dart';
 
 class MonitorCard extends StatefulWidget {
-  const MonitorCard({
-    super.key,
-
-  });
+  const MonitorCard({super.key});
 
   @override
   State<MonitorCard> createState() => _MonitorCardState();
@@ -18,30 +16,27 @@ class _MonitorCardState extends State<MonitorCard> {
       onTap: _onTap,
       child: Card(
         child: Center(
-          child:  Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.monitor_heart,
-              size: 70,
-              color: Colors.cyan,
-            ),
-            const SizedBox(height: 8),
-            const Text(
-              "Live Monitor",
-              style: TextStyle(
-                color: Colors.cyan,
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.monitor_heart, size: 70, color: Colors.cyan),
+              const SizedBox(height: 8),
+              const Text(
+                "Live Monitor",
+                style: TextStyle(
+                  color: Colors.cyan,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-            ),
-          ],
-        ),
+            ],
+          ),
         ),
       ),
     );
   }
 
   void _onTap() {
+    Navigator.of(context).pushNamed(LiveMonitoring.routeName);
   }
 }

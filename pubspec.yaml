@@ -51,6 +51,7 @@ dependencies:
   permission_handler: ^12.0.3
   flutter_blue_plus: ^2.3.11
   web_socket_channel: ^3.0.3
+  hive: ^2.2.3
   # wifi_connector: ^2.0.0
 
 
