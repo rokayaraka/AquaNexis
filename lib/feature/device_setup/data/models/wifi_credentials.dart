@@ -3,6 +3,13 @@ class WifiCredentials {
   final String password;
   final String? server;
   final String? deviceId;
+  final String? deviceWebSocketUrl;
 
-  WifiCredentials({required this.ssid, required this.password, this.server, this.deviceId});
+  WifiCredentials({
+    required this.ssid,
+    required this.password,
+    this.server,
+    this.deviceId,
+    required this.deviceWebSocketUrl,
+  });
 }

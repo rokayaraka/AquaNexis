@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:typed_data';
+import 'package:aqua_nexis/core/storage/auth_storage.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '../../../app/urls.dart';
@@ -29,10 +30,13 @@ class WebSocketService {
       return;
     }
 
-     String uri = Urls.webSocketUrl('esp_p4_001', 'f5c105170a2d7b28b5be1fd77cec4fb58225d72f');
+    String uri = Urls.webSocketUrl(
+      AuthStorage.userData!.device!.deviceId,
+      AuthStorage.userData!.token!,
+    );
 
     _channel = WebSocketChannel.connect(Uri.parse(uri));
-
+    log('WebSocket connected to $uri', name: 'WebSocketService');
     _channel!.stream.listen(
       _handleMessage,
       onError: (error) {

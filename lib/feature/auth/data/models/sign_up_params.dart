@@ -1,4 +1,4 @@
-class SignUpParams{
+class SignUpParams {
   final String email;
   final String password;
   final String deviceId;
@@ -15,9 +15,9 @@ class SignUpParams{
     return {
       'email': email,
       'password': password,
-      'deviceId': deviceId,
-      'name': name,
-      'phone': phone,
+      'device_id': deviceId,
+      'username': name,
+      // 'phone': phone,
     };
   }
 }

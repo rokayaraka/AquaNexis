@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../app/app_colors.dart';
+import '../../widgets/video_message.dart';
 
 class LiveMonitoring extends StatefulWidget {
   const LiveMonitoring({super.key});
@@ -31,45 +32,57 @@ class _LiveMonitoringState extends State<LiveMonitoring> {
       ),
 
       body: Center(
-        child: AspectRatio(
-          aspectRatio: 16 / 9,
-          child: StreamBuilder(
-            stream: videoStream,
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                return const _VideoMessage('Video stream unavailable');
-              }
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: AspectRatio(
+                aspectRatio: 12 / 9,
+                child: StreamBuilder(
+                  stream: videoStream,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return const VideoMessage(
+                        message: 'Video stream unavailable',
+                      );
+                    }
 
-              final frame = snapshot.data;
-              if (frame == null) {
-                return const _VideoMessage('Waiting for video...');
-              }
+                    final frame = snapshot.data;
+                    if (frame == null) {
+                      return const VideoMessage(
+                        message: 'Waiting for video...',
+                      );
+                    }
 
-              return Image.memory(
-                frame,
-                fit: BoxFit.contain,
-                
-                gaplessPlayback: true,
-                errorBuilder: (context, error, stackTrace) =>
-                    const _VideoMessage('Unable to display video frame'),
-              );
-            },
-          ),
+                    return ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: ColorFiltered(
+                        colorFilter: ColorFilter.mode(
+                          Colors.red.withOpacity(0.1),
+                          BlendMode.color,
+                        ),
+                        child: Image.memory(
+                          frame,
+                          width: double.infinity,
+                          height: 300,
+                          fit: BoxFit.contain,
+
+                          gaplessPlayback: true,
+                          errorBuilder: (context, error, stackTrace) =>
+                              const VideoMessage(
+                                message: 'Unable to display video frame',
+                              ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ],
         ),
       ),
-    );
-  }
-}
-
-class _VideoMessage extends StatelessWidget {
-  const _VideoMessage(this.message);
-
-  final String message;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text(message, style: const TextStyle(color: Colors.white70)),
     );
   }
 }

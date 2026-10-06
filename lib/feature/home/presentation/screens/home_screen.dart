@@ -6,31 +6,31 @@ import '../../../../app/app_colors.dart';
 import '../providers/sensor_provider.dart';
 import '../widgets/device_setup_card.dart';
 import '../widgets/food_level_card.dart';
+import '../widgets/log_out_card.dart';
 import '../widgets/monitor_card.dart';
 import '../widgets/ph_card.dart';
 import '../widgets/settings_card.dart';
 import '../widgets/temperature_card.dart';
 import '../widgets/turbidity_card.dart';
 
-
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
-  static const String routeName='/home';
+  static const String routeName = '/home';
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   @override
   Widget build(BuildContext context) {
-    final sensor=context.watch<SensorProvider>();
+    final sensor = context.watch<SensorProvider>();
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFF0C3035),
-        title:  Text('Home',
-          style:textTheme.titleMedium?.copyWith(
+        title: Text(
+          'Home',
+          style: textTheme.titleMedium?.copyWith(
             fontSize: 30,
             color: AppColors.textColorDarkSecondary,
           ),
@@ -44,8 +44,8 @@ class _HomeScreenState extends State<HomeScreen> {
             shape: BoxShape.circle,
             color: AppColors.textColorDark,
           ),
-          child:IconButton(
-            icon: const Icon(Icons.person,size:18),
+          child: IconButton(
+            icon: const Icon(Icons.person, size: 18),
             color: AppColors.themeColorDark,
             onPressed: () {
               // Handle menu button press
@@ -56,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
             icon: const Icon(Icons.notifications),
             onPressed: () {
-              // 
+              //
             },
           ),
         ],
@@ -67,7 +67,10 @@ class _HomeScreenState extends State<HomeScreen> {
             await sensor.refreshConnection();
           },
           child: GridView(
-            padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 40.0),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 12.0,
+              vertical: 40.0,
+            ),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               crossAxisSpacing: 10,
@@ -76,19 +79,18 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             children: [
               const PhCard(),
-               TurbidityCard(turbidity: sensor.turbidityRaw??0.0,),
-               TemperatureCard(temperature: sensor.temperature??0.0,),
+              TurbidityCard(turbidity: sensor.turbidityRaw ?? 0.0),
+              TemperatureCard(temperature: sensor.temperature ?? 0.0),
               const FoodLevelCard(),
               const MonitorCard(),
-              DeviceSetupCard(deviceStatus: sensor.status == 'online',),
-              const FeedingCard( ),
+              DeviceSetupCard(deviceStatus: sensor.status == 'online'),
+              const FeedingCard(),
               const SettingsCard(),
-              
+              const LogOutCard(),
             ],
-            ),
+          ),
         ),
       ),
     );
   }
 }
-

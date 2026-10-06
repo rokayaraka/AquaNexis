@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
@@ -7,7 +8,7 @@ import '../../../../core/service/web_socket/websocket_service.dart';
 
 class SensorProvider extends ChangeNotifier {
   SensorProvider({WebSocketService? webSocketService})
-      : _webSocketService = webSocketService ?? WebSocketService();
+    : _webSocketService = webSocketService ?? WebSocketService();
 
   final WebSocketService _webSocketService;
 
@@ -32,7 +33,7 @@ class SensorProvider extends ChangeNotifier {
 
     _subscription = _webSocketService.messages.listen((message) {
       final type = message['type']?.toString();
-
+      log('WebSocket message received: $message', name: 'SensorProvider');
       if (type == 'status') {
         status = message['status']?.toString() ?? 'unknown';
       }
@@ -42,13 +43,16 @@ class SensorProvider extends ChangeNotifier {
         final data = rawData is Map
             ? Map<String, dynamic>.from(rawData)
             : message;
-
+        log(
+          'WebSocket sensor data: ${data['temperature'].toString()}',
+          name: 'SensorProvider',
+        );
         temperature = _parseDouble(data['temperature']) ?? temperature;
-        turbidityRaw = _parseDouble(
-              data['turbidity_raw'] ?? data['turbidityRaw'],
-            ) ??
+        turbidityRaw =
+            _parseDouble(data['turbidity_raw'] ?? data['turbidityRaw']) ??
             turbidityRaw;
-        turbidityVoltage = _parseDouble(
+        turbidityVoltage =
+            _parseDouble(
               data['turbidity_voltage'] ?? data['turbidityVoltage'],
             ) ??
             turbidityVoltage;

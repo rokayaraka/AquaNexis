@@ -4,11 +4,13 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../app/app_colors.dart';
+import '../../data/models/sign_up_params.dart';
+import '../providers/sign_up_provider.dart';
 import '../../../shared/utils/validators.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
-  static const String routeName='/sign_up';
+  static const String routeName = '/sign_up';
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
 }
@@ -17,16 +19,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _deviceIdController = TextEditingController();
+  final SignUpProvider _signUpProvider = SignUpProvider();
   late TapGestureRecognizer _signInRecognizer;
+  bool _isSigningUp = false;
   @override
   void initState() {
     super.initState();
     _signInRecognizer = TapGestureRecognizer()..onTap = _onTapSignIn;
   }
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -42,97 +48,116 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  children:  [
-                        Text(
-                          'Create New Account',
-                          style: textTheme.titleLarge?.copyWith(
-                            fontSize: 35,
-                            color: AppColors.textColorDarkSecondary,
-                          ),
+                  children: [
+                    Text(
+                      'Create New Account',
+                      style: textTheme.titleLarge?.copyWith(
+                        fontSize: 35,
+                        color: AppColors.textColorDarkSecondary,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    TextFormField(
+                      controller: _emailController,
+                      decoration: InputDecoration(
+                        hintText: 'Email',
+                        hintStyle: textTheme.labelMedium,
+                      ),
+                      validator: (String? value) =>
+                          Validators.validateEmail(value),
+                    ),
+                    const SizedBox(height: 20),
+                    TextFormField(
+                      controller: _fullNameController,
+                      decoration: InputDecoration(
+                        hintText: 'Full Name',
+                        hintStyle: textTheme.labelMedium,
+                      ),
+                      validator: (String? value) => Validators.validateInput(
+                        value,
+                        "Please enter your full name",
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    TextFormField(
+                      controller: _phoneNumberController,
+                      decoration: InputDecoration(
+                        hintText: 'Phone ',
+                        hintStyle: textTheme.labelMedium,
+                      ),
+                      validator: (String? value) => Validators.validateInput(
+                        value,
+                        "Please enter your phone number",
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    TextFormField(
+                      controller: _deviceIdController,
+                      decoration: InputDecoration(
+                        hintText: 'Device ID',
+                        hintStyle: textTheme.labelMedium,
+                        suffixIcon: IconButton(
+                          icon: const Icon(Icons.qr_code),
+                          onPressed: _onScanQRCode,
                         ),
-                        const SizedBox(height: 20),
-                         TextFormField(
-                        controller: _emailController,
-                          decoration:  InputDecoration(
-                            hintText: 'Email',
-                            hintStyle: textTheme.labelMedium,
-                          ),
-                          validator: (String? value)=>Validators.validateEmail(value),
+                      ),
+                      validator: (String? value) => Validators.validateInput(
+                        value,
+                        "Please enter your device ID",
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    TextFormField(
+                      controller: _passwordController,
+                      obscureText: true,
+
+                      decoration: InputDecoration(
+                        suffixIcon: IconButton(
+                          icon: Icon(Icons.visibility_off),
+                          onPressed: () {
+                            // Toggle password visibility
+                          },
                         ),
-                          const SizedBox(height: 20),
-                         TextFormField(
-                        controller: _fullNameController,
-                          decoration:  InputDecoration(
-                            hintText: 'Full Name',
-                            hintStyle: textTheme.labelMedium,
-                          ),
-                          validator: (String? value)=>Validators.validateInput(value,"Please enter your full name"),
+                        hintText: 'Password',
+                        hintStyle: textTheme.labelMedium,
+                      ),
+                      validator: (String? value) =>
+                          Validators.validatePassword(value),
+                    ),
+                    const SizedBox(height: 20),
+                    TextFormField(
+                      controller: _confirmPasswordController,
+                      obscureText: true,
+
+                      decoration: InputDecoration(
+                        suffixIcon: IconButton(
+                          icon: Icon(Icons.visibility_off),
+                          onPressed: () {
+                            // Toggle password visibility
+                          },
                         ),
-                         const SizedBox(height: 20),
-                         TextFormField(
-                        controller: _phoneNumberController,
-                          decoration:  InputDecoration(
-                            hintText: 'Phone ',
-                            hintStyle: textTheme.labelMedium,
+                        hintText: 'Confirm Password',
+                        hintStyle: textTheme.labelMedium,
+                      ),
+                      validator: (String? value) =>
+                          Validators.validateConfirmPassword(
+                            value,
+                            _passwordController.text,
                           ),
-                          validator: (String? value)=>Validators.validateInput(value,"Please enter your phone number"),
-                        ),
-                        const SizedBox(height: 20),
-                         TextFormField(
-                        controller: _deviceIdController,
-                          decoration:  InputDecoration(
-                            hintText: 'Device ID',
-                            hintStyle: textTheme.labelMedium,
-                            suffixIcon: IconButton(
-                              icon: const Icon(Icons.qr_code),
-                              onPressed: _onScanQRCode,
-                            ),
-                          ),
-                          validator: (String? value)=>Validators.validateInput(value,"Please enter your device ID"),
-                         
-                        ),
-                         const SizedBox(height: 20),
-                        TextFormField(
-                          controller: _passwordController,
-                          obscureText: true,
-                          
-                          decoration:  InputDecoration(
-                            suffixIcon: IconButton(
-                            icon:  Icon(Icons.visibility_off),
-                            onPressed: () {
-                              // Toggle password visibility
-                            },
-                          ),
-                            hintText: 'Password',
-                            hintStyle: textTheme.labelMedium,
-                          ),
-                          validator: (String? value)=>Validators.validatePassword(value),
-                        ),
-                         const SizedBox(height: 20),
-                        TextFormField(
-                          controller: _confirmPasswordController,
-                          obscureText: true,
-                          
-                          decoration:  InputDecoration(
-                            suffixIcon: IconButton(
-                            icon:  Icon(Icons.visibility_off),
-                            onPressed: () {
-                              // Toggle password visibility
-                            },
-                          ),
-                            hintText: 'Confirm Password',
-                            hintStyle: textTheme.labelMedium,
-                          ),
-                          validator: (String? value)=>Validators.validateConfirmPassword(value, _passwordController.text),
-                        ),
-                         const SizedBox(height: 20),
-                        FilledButton(
-                          onPressed: _onTapSignUp,
-                          child: const Text('Sign Up'),
-                        
-                     ),
-                     const SizedBox(height: 8),
-                     RichText(
+                    ),
+                    const SizedBox(height: 20),
+                    FilledButton(
+                      onPressed: _isSigningUp ? null : _onTapSignUp,
+                      child: _isSigningUp
+                          ? const SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            )
+                          : const Text('Sign Up'),
+                    ),
+                    const SizedBox(height: 8),
+                    RichText(
                       text: TextSpan(
                         text: 'By continuing you accept out  ',
                         style: textTheme.bodyMedium,
@@ -143,10 +168,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               color: AppColors.textColorDarkSecondary,
                             ),
                           ),
-                          TextSpan(
-                            text: 'and',
-                            style: textTheme.bodyMedium,
-                          ),
+                          TextSpan(text: 'and', style: textTheme.bodyMedium),
                           TextSpan(
                             text: ' Terms of Service',
                             style: textTheme.labelSmall?.copyWith(
@@ -155,24 +177,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                         ],
                       ),
-                     ),
-                     const SizedBox(height: 20),
-                     RichText(
-                       text: TextSpan(
-                         text: 'Don\'t have an account? ',
-                         style: textTheme.bodyMedium,
-                         children: [
-                           TextSpan(
-                             text: 'Sign In',
-                             style: textTheme.labelSmall?.copyWith(
-                               color: AppColors.textColorDarkSecondary,
-                             ),
-                             recognizer: _signInRecognizer,
-                           ),
-                         ],
-                       ),
-                     )
-        
+                    ),
+                    const SizedBox(height: 20),
+                    RichText(
+                      text: TextSpan(
+                        text: 'Don\'t have an account? ',
+                        style: textTheme.bodyMedium,
+                        children: [
+                          TextSpan(
+                            text: 'Sign In',
+                            style: textTheme.labelSmall?.copyWith(
+                              color: AppColors.textColorDarkSecondary,
+                            ),
+                            recognizer: _signInRecognizer,
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -182,19 +203,62 @@ class _SignUpScreenState extends State<SignUpScreen> {
       ),
     );
   }
-  
 
-  
-  Future<void> _onScanQRCode() async{
-    final scannedDeviceId = await Navigator.pushNamed<String>(context, ScanDeviceIdScreen.routeName);
-     if (!mounted || scannedDeviceId == null || scannedDeviceId.isEmpty) return;
+  Future<void> _onScanQRCode() async {
+    final scannedDeviceId = await Navigator.pushNamed<String>(
+      context,
+      ScanDeviceIdScreen.routeName,
+    );
+    if (!mounted || scannedDeviceId == null || scannedDeviceId.isEmpty) return;
 
-  setState(() {
-    _deviceIdController.text = scannedDeviceId;
-  });
+    setState(() {
+      _deviceIdController.text = scannedDeviceId;
+    });
   }
-  void _onTapSignUp() {
+
+  Future<void> _onTapSignUp() async {
+    if (!(_formKey.currentState?.validate() ?? false) || _isSigningUp) {
+      return;
+    }
+
+    setState(() {
+      _isSigningUp = true;
+    });
+
+    final isRegistered = await _signUpProvider.signUp(
+      SignUpParams(
+        email: _emailController.text.trim(),
+        password: _passwordController.text,
+        deviceId: _deviceIdController.text.trim(),
+        name: _fullNameController.text.trim(),
+        phone: _phoneNumberController.text.trim(),
+      ),
+    );
+
+    if (!mounted) return;
+
+    setState(() {
+      _isSigningUp = false;
+    });
+
+    if (isRegistered) {
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        SignInScreen.routeName,
+        (route) => false,
+      );
+      return;
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          _signUpProvider.errorMessage ?? 'Unable to create your account.',
+        ),
+      ),
+    );
   }
+
   @override
   void dispose() {
     _emailController.dispose();
@@ -204,8 +268,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
     _phoneNumberController.dispose();
     _deviceIdController.dispose();
     _signInRecognizer.dispose();
+    _signUpProvider.dispose();
     super.dispose();
   }
+
   void _onTapSignIn() {
     Navigator.pushAndRemoveUntil(
       context,
@@ -213,4 +279,4 @@ class _SignUpScreenState extends State<SignUpScreen> {
       (route) => false,
     );
   }
-} 
+}

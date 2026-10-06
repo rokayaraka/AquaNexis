@@ -1,6 +1,8 @@
 import 'package:aqua_nexis/feature/auth/presentation/screens/sign_in_screen.dart';
 import 'package:aqua_nexis/feature/auth/presentation/widgets/logo_animation.dart';
 import 'package:flutter/material.dart';
+import 'package:aqua_nexis/core/storage/auth_storage.dart';
+import '../../../home/presentation/screens/home_screen.dart';
 import '../../../shared/widgets/customed_progress_indecator.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -16,7 +18,10 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     Future.delayed(const Duration(milliseconds: 4500), () {
       if (!mounted) return;
-      Navigator.pushNamedAndRemoveUntil(context, SignInScreen.routeName, (route) => false);
+      final destination = AuthStorage.hasUserData
+          ? HomeScreen.routeName
+          : SignInScreen.routeName;
+      Navigator.pushNamedAndRemoveUntil(context, destination, (route) => false);
     });
   }
 
@@ -32,8 +37,8 @@ class _SplashScreenState extends State<SplashScreen> {
             spacing: 200,
             children: [
               Spacer(),
-              LogoAnimation(width: MediaQuery.of(context).size.width*.75 ),
-              
+              LogoAnimation(width: MediaQuery.of(context).size.width * .75),
+
               CustomedProgressIndecator(),
             ],
           ),

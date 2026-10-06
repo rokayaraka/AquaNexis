@@ -1,7 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
-
 import '../../../../app/app_colors.dart';
+import '../../../../core/storage/auth_storage.dart';
 import '../../data/models/wifi_credentials.dart';
 
 class AquaNexisWifiConnection extends StatefulWidget {
@@ -84,9 +86,12 @@ class _AquaNexisWifiConnectionState extends State<AquaNexisWifiConnection> {
                 const SizedBox(height: 40.0),
                 FilledButton(onPressed: _onTapConnect, child: Text('Connect')),
                 const SizedBox(height: 20.0),
-                FilledButton(onPressed: (){
-                  Navigator.pop(context);
-                }, child: Text('Cancel')),
+                FilledButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text('Cancel'),
+                ),
               ],
             ),
           ),
@@ -97,11 +102,15 @@ class _AquaNexisWifiConnectionState extends State<AquaNexisWifiConnection> {
 
   void _onTapConnect() async {
     if (!_formKey.currentState!.validate()) return;
-    return Navigator.of(context).pop(WifiCredentials(
-      ssid: _ssidController.text,
-      password: _passwordController.text,
-      server: "",
-      deviceId: "",
-    ));
+    log(AuthStorage.userData?.deviceWebSocketUrl ?? "No device websocket url");
+    return Navigator.of(context).pop(
+      WifiCredentials(
+        ssid: _ssidController.text,
+        password: _passwordController.text,
+        server: "",
+        deviceId: "",
+        deviceWebSocketUrl: AuthStorage.userData?.deviceWebSocketUrl ?? "",
+      ),
+    );
   }
 }

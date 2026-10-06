@@ -9,6 +9,7 @@ import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../../../app/app_colors.dart';
+import '../../../../core/storage/auth_storage.dart';
 import '../widgets/aqua_nexis_wifi_connection.dart';
 
 class DeviceSetupScreen extends StatefulWidget {
@@ -97,12 +98,15 @@ class _DeviceSetupScreenState extends State<DeviceSetupScreen> {
       log('BLE connection state after connect: $connectionState');
 
       await discoverServices(device);
-
+      log(
+        "sending provision with credentials: ${credentials.deviceWebSocketUrl}",
+      );
       await sendProvision(
         credentials.ssid,
         credentials.password,
         credentials.deviceId,
         credentials.server,
+        credentials.deviceWebSocketUrl,
       );
     } catch (e) {
       log(e.toString());
@@ -135,15 +139,16 @@ class _DeviceSetupScreenState extends State<DeviceSetupScreen> {
               await statusCharacteristic!.setNotifyValue(true);
 
               _statusSubscription?.cancel();
-              _statusSubscription = statusCharacteristic!.onValueReceived.listen((value) {
-                final response = utf8.decode(value).trim();
-                log('Device status response: $response');
+              _statusSubscription = statusCharacteristic!.onValueReceived
+                  .listen((value) {
+                    final response = utf8.decode(value).trim();
+                    log('Device status response: $response');
 
-                if (_statusResponseCompleter != null &&
-                    !_statusResponseCompleter!.isCompleted) {
-                  _statusResponseCompleter!.complete(response);
-                }
-              });
+                    if (_statusResponseCompleter != null &&
+                        !_statusResponseCompleter!.isCompleted) {
+                      _statusResponseCompleter!.complete(response);
+                    }
+                  });
 
               log("✅ Found Status Characteristic!");
             }
@@ -156,7 +161,9 @@ class _DeviceSetupScreenState extends State<DeviceSetupScreen> {
       }
 
       if (statusCharacteristic == null) {
-        log("⚠️ Status characteristic not found. Please set statusUUID to your device's notify characteristic.");
+        log(
+          "⚠️ Status characteristic not found. Please set statusUUID to your device's notify characteristic.",
+        );
       }
     } catch (e) {
       log("❌ Error discovering services: $e");
@@ -168,6 +175,7 @@ class _DeviceSetupScreenState extends State<DeviceSetupScreen> {
     String password,
     String? deviceId,
     String? server,
+    String? webSocketUrl,
   ) async {
     if (provisionCharacteristic == null) {
       log("❌ Provision Characteristic not found");
@@ -179,11 +187,13 @@ class _DeviceSetupScreenState extends State<DeviceSetupScreen> {
       log("🔍 Properties: ${provisionCharacteristic!.properties}");
       log("🔍 Can Write: ${provisionCharacteristic!.properties.write}");
 
+      final secureWebSocketUrl = _toSecureWebSocketUrl(webSocketUrl);
       final payload = {
         "ssid": ssid,
         "password": password,
-        "deviceId": deviceId ?? "default-device-id",
-        "server": server ?? "https://your-django-server.com",
+        "deviceId": deviceId ?? AuthStorage.userData?.device?.deviceId ?? "",
+        "server": server ?? "aquanexis-backend.onrender.com",
+        "deviceWebSocketUrl": secureWebSocketUrl,
       };
 
       final jsonString = jsonEncode(payload);
@@ -205,12 +215,13 @@ class _DeviceSetupScreenState extends State<DeviceSetupScreen> {
       final response = await _waitForStatusResponse(
         timeout: const Duration(seconds: 20),
       );
-      
+
       if (response == null) {
         log("⚠️ No device status response received within timeout.");
         if (mounted) {
           setState(() {
-            _statusMessage = 'Credentials sent, but the device did not confirm success.';
+            _statusMessage =
+                'Credentials sent, but the device did not confirm success.';
           });
         }
         return;
@@ -222,7 +233,6 @@ class _DeviceSetupScreenState extends State<DeviceSetupScreen> {
           setState(() {
             _statusMessage = 'Device connected to the Wi-Fi successfully.';
           });
-         
         }
       } else {
         log("❌ Device reported failure: $response");
@@ -232,25 +242,32 @@ class _DeviceSetupScreenState extends State<DeviceSetupScreen> {
           });
         }
       }
-
     } catch (e) {
       log("❌ Error sending provision: $e");
-    }finally {
-      if(mounted) {
-       ScaffoldMessenger.of(context).showSnackBar(
-
-             SnackBar(content: Text(_statusMessage),
-             duration: Duration(seconds: 3),
-             ),
-
-          );
+    } finally {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(_statusMessage),
+            duration: Duration(seconds: 3),
+          ),
+        );
       }
     }
   }
 
-  Future<String?> _waitForStatusResponse({
-    required Duration timeout,
-  }) async {
+  String _toSecureWebSocketUrl(String? url) {
+    final value = url?.trim() ?? '';
+    if (value.startsWith('ws://')) {
+      return 'wss://${value.substring('ws://'.length)}';
+    }
+    if (value.startsWith('http://')) {
+      return 'https://${value.substring('http://'.length)}';
+    }
+    return value;
+  }
+
+  Future<String?> _waitForStatusResponse({required Duration timeout}) async {
     if (statusCharacteristic == null) {
       return null;
     }
@@ -426,7 +443,7 @@ class _DeviceSetupScreenState extends State<DeviceSetupScreen> {
                   final deviceName = result.advertisementData.advName.isNotEmpty
                       ? result.advertisementData.advName
                       : 'Unknown device';
-          
+
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 12),
                     child: Card(
@@ -437,7 +454,7 @@ class _DeviceSetupScreenState extends State<DeviceSetupScreen> {
                           'ID: ${result.device.remoteId}\nRSSI: ${result.rssi}',
                         ),
                         isThreeLine: true,
-          
+
                         onTap: () => _onTap(result.device),
                       ),
                     ),
@@ -458,13 +475,11 @@ class _DeviceSetupScreenState extends State<DeviceSetupScreen> {
 
   Future<void> _onTap(BluetoothDevice device) async {
     final credentials = await showDialog<WifiCredentials>(
-      
       context: context,
       barrierDismissible: false,
 
       builder: (context) {
         return Dialog(
-          
           insetPadding: const EdgeInsets.all(16),
           child: const AquaNexisWifiConnection(),
         );
