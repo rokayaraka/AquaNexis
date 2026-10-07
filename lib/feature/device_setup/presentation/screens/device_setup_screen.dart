@@ -187,13 +187,13 @@ class _DeviceSetupScreenState extends State<DeviceSetupScreen> {
       log("🔍 Properties: ${provisionCharacteristic!.properties}");
       log("🔍 Can Write: ${provisionCharacteristic!.properties.write}");
 
-      final secureWebSocketUrl = _toSecureWebSocketUrl(webSocketUrl);
+      // final secureWebSocketUrl = _toSecureWebSocketUrl(webSocketUrl);
       final payload = {
         "ssid": ssid,
         "password": password,
         "deviceId": deviceId ?? AuthStorage.userData?.device?.deviceId ?? "",
         "server": server ?? "aquanexis-backend.onrender.com",
-        "deviceWebSocketUrl": secureWebSocketUrl,
+        "deviceWebSocketUrl": webSocketUrl ?? "",
       };
 
       final jsonString = jsonEncode(payload);
