@@ -7,6 +7,7 @@ import '../feature/auth/presentation/screens/scan_device_id_screen.dart';
 import '../feature/device_setup/presentation/screens/device_setup_screen.dart';
 import '../feature/home/presentation/screens/home_screen.dart';
 import '../feature/monitoring/presentation/screens/live_monitoring.dart';
+import '../feature/temperature/presentation/temperature_history_visualization.dart';
 
 class AppRoutes {
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
@@ -27,6 +28,10 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const DeviceSetupScreen());
       case LiveMonitoring.routeName:
         return MaterialPageRoute(builder: (_) => const LiveMonitoring());
+      case TemperatureHistoryVisualization.routeName:
+        return MaterialPageRoute(
+          builder: (_) => const TemperatureHistoryVisualization(),
+        );
       default:
         return MaterialPageRoute(builder: (_) => const SizedBox());
     }

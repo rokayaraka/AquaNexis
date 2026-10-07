@@ -57,23 +57,17 @@ class _LiveMonitoringState extends State<LiveMonitoring> {
 
                     return ClipRRect(
                       borderRadius: BorderRadius.circular(20),
-                      child: ColorFiltered(
-                        colorFilter: ColorFilter.mode(
-                          Colors.red.withOpacity(0.1),
-                          BlendMode.color,
-                        ),
-                        child: Image.memory(
-                          frame,
-                          width: double.infinity,
-                          height: 300,
-                          fit: BoxFit.contain,
+                      child: Image.memory(
+                        frame,
+                        width: double.infinity,
 
-                          gaplessPlayback: true,
-                          errorBuilder: (context, error, stackTrace) =>
-                              const VideoMessage(
-                                message: 'Unable to display video frame',
-                              ),
-                        ),
+                        fit: BoxFit.fill,
+
+                        gaplessPlayback: true,
+                        errorBuilder: (context, error, stackTrace) =>
+                            const VideoMessage(
+                              message: 'Unable to display video frame',
+                            ),
                       ),
                     );
                   },

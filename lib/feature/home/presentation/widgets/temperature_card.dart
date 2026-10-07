@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 import '../../../../app/app_colors.dart';
+import '../../../temperature/presentation/temperature_history_visualization.dart';
 
 class TemperatureCard extends StatefulWidget {
   const TemperatureCard({
@@ -59,5 +60,9 @@ class _TemperatureCardState extends State<TemperatureCard> {
   }
 
   void _onTap() {
+    Navigator.pushNamed(
+      context,
+      TemperatureHistoryVisualization.routeName,
+    );
   }
 }
