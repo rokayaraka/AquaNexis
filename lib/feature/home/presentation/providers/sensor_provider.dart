@@ -20,8 +20,13 @@ class SensorProvider extends ChangeNotifier {
   double? temperature;
   double? turbidityRaw;
   double? turbidityVoltage;
-  Future<void> refreshConnection() async {
+
+  void disconnect() {
     _webSocketService.disconnect();
+  }
+
+  Future<void> refreshConnection() async {
+    disconnect();
 
     await Future<void>.delayed(const Duration(milliseconds: 300));
 

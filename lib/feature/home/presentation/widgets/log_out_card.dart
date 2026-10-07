@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../core/storage/auth_storage.dart';
 import '../../../auth/presentation/screens/sign_in_screen.dart';
+import '../providers/sensor_provider.dart';
 
 class LogOutCard extends StatefulWidget {
   const LogOutCard({super.key});
@@ -38,7 +40,9 @@ class _LogOutCardState extends State<LogOutCard> {
   }
 
   Future<void> _onTap() async {
+    context.read<SensorProvider>().disconnect();
     await AuthStorage.clear();
+
     if (!mounted) return;
 
     Navigator.pushNamedAndRemoveUntil(
