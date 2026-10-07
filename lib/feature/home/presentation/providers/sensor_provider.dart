@@ -49,7 +49,7 @@ class SensorProvider extends ChangeNotifier {
             ? Map<String, dynamic>.from(rawData)
             : message;
         log(
-          'WebSocket sensor data: ${data['temperature'].toString()}',
+          'WebSocket sensor data: ${data['turbidity_raw'].toString()}',
           name: 'SensorProvider',
         );
         temperature = _parseDouble(data['temperature']) ?? temperature;

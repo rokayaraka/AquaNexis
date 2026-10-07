@@ -79,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             children: [
               const PhCard(),
-              TurbidityCard(turbidity: sensor.turbidityRaw ?? 0.0),
+              TurbidityCard(turbidity: sensor.turbidityVoltage ?? 0.0),
               TemperatureCard(temperature: sensor.temperature ?? 0.0),
               const FoodLevelCard(),
               const MonitorCard(),

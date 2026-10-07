@@ -8,6 +8,7 @@ import '../feature/device_setup/presentation/screens/device_setup_screen.dart';
 import '../feature/home/presentation/screens/home_screen.dart';
 import '../feature/monitoring/presentation/screens/live_monitoring.dart';
 import '../feature/temperature/presentation/temperature_history_visualization.dart';
+import '../feature/turbidity/presentation/screens/turbidity_history_visualization.dart';
 
 class AppRoutes {
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
@@ -31,6 +32,10 @@ class AppRoutes {
       case TemperatureHistoryVisualization.routeName:
         return MaterialPageRoute(
           builder: (_) => const TemperatureHistoryVisualization(),
+        );
+      case TurbidityHistoryVisualization.routeName:
+        return MaterialPageRoute(
+          builder: (_) => const TurbidityHistoryVisualization(),
         );
       default:
         return MaterialPageRoute(builder: (_) => const SizedBox());
