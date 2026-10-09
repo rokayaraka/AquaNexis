@@ -7,7 +7,8 @@ import '../feature/auth/presentation/screens/scan_device_id_screen.dart';
 import '../feature/device_setup/presentation/screens/device_setup_screen.dart';
 import '../feature/home/presentation/screens/home_screen.dart';
 import '../feature/monitoring/presentation/screens/live_monitoring.dart';
-import '../feature/temperature/presentation/temperature_history_visualization.dart';
+import '../feature/ph/presentation/screens/ph_history_visualization.dart';
+import '../feature/temperature/presentation/screens/temperature_history_visualization.dart';
 import '../feature/turbidity/presentation/screens/turbidity_history_visualization.dart';
 
 class AppRoutes {
@@ -29,6 +30,10 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const DeviceSetupScreen());
       case LiveMonitoring.routeName:
         return MaterialPageRoute(builder: (_) => const LiveMonitoring());
+      case PhHistoryVisualization.routeName:
+        return MaterialPageRoute(
+          builder: (_) => const PhHistoryVisualization(),
+        );
       case TemperatureHistoryVisualization.routeName:
         return MaterialPageRoute(
           builder: (_) => const TemperatureHistoryVisualization(),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../app/app_colors.dart';
+import '../../../../../app/app_colors.dart';
 
 class VideoMessage extends StatelessWidget {
   const VideoMessage({super.key, required this.message});

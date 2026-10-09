@@ -1,25 +1,24 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
-import '../data/model/temperature_history_model.dart';
+import '../../data/model/ph_history_model.dart';
 
-class TemperatureHistoryPieChart extends StatelessWidget {
-  const TemperatureHistoryPieChart({required this.history, super.key});
+class PhHistoryPieChart extends StatelessWidget {
+  const PhHistoryPieChart({required this.history, super.key});
 
-  final List<TemperatureHistoryModel> history;
+  final List<PhHistoryModel> history;
 
   static const _ranges = [
-    _TemperatureRange('Cold (<15°C)', Colors.blue),
-    _TemperatureRange('Normal (15-23°C)', Colors.green),
-    _TemperatureRange('Warm (23-25°C)', Colors.yellow),
-    _TemperatureRange('Hot (>25°C)', Colors.red),
+    _PhRange('Acidic (<6.5)', Colors.red),
+    _PhRange('Normal (>=6.5 & <=7.5)', Colors.green),
+    _PhRange('Alkaline (>7.5)', Colors.blue),
   ];
 
   @override
   Widget build(BuildContext context) {
     final counts = List<int>.filled(_ranges.length, 0);
     for (final item in history) {
-      counts[_rangeIndex(item.temperature)]++;
+      counts[_rangeIndex(item.ph)]++;
     }
 
     return Padding(
@@ -65,18 +64,17 @@ class TemperatureHistoryPieChart extends StatelessWidget {
     );
   }
 
-  int _rangeIndex(double temperature) {
-    if (temperature < 15) return 0;
-    if (temperature < 23) return 1;
-    if (temperature <= 25) return 2;
-    return 3;
+  int _rangeIndex(double ph) {
+    if (ph < 6.5) return 0;
+    if (ph <= 7.5) return 1;
+    return 2;
   }
 }
 
 class _LegendItem extends StatelessWidget {
   const _LegendItem({required this.range, required this.count});
 
-  final _TemperatureRange range;
+  final _PhRange range;
   final int count;
 
   @override
@@ -96,8 +94,8 @@ class _LegendItem extends StatelessWidget {
   }
 }
 
-class _TemperatureRange {
-  const _TemperatureRange(this.label, this.color);
+class _PhRange {
+  const _PhRange(this.label, this.color);
 
   final String label;
   final Color color;

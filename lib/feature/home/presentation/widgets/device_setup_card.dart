@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 import '../../../device_setup/presentation/screens/device_setup_screen.dart';
@@ -13,6 +15,7 @@ class DeviceSetupCard extends StatefulWidget {
 class _DeviceSetupCardState extends State<DeviceSetupCard> {
   @override
   Widget build(BuildContext context) {
+    log("Device Status: ${widget.deviceStatus}");
     return GestureDetector(
       onTap: !widget.deviceStatus ? _onTap : null,
       child: Card(

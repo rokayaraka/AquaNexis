@@ -1,38 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../app/app_colors.dart';
+import '../../../../../app/app_colors.dart';
 import '../../../shared/widgets/customed_no_history_logo.dart';
-import '../provider/turbidity_history_provider.dart';
-import '../widgets/turbidity_history_list.dart';
-import '../widgets/turbidity_history_pie_chart.dart';
+import '../provider/temperature_history_provider.dart';
+import '../widgets/temperature_history_list.dart';
+import '../widgets/temperature_history_pie_chart.dart';
 
-class TurbidityHistoryVisualization extends StatelessWidget {
-  const TurbidityHistoryVisualization({super.key});
+class TemperatureHistoryVisualization extends StatelessWidget {
+  const TemperatureHistoryVisualization({super.key});
 
-  static const String routeName = '/turbidity-history-visualization';
+  static const String routeName = '/temperature-history-visualization';
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => TurbidityHistoryProvider()..loadHistory(),
-      child: const _TurbidityHistoryView(),
+      create: (_) => TemperatureHistoryProvider()..loadHistory(),
+      child: const _TemperatureHistoryView(),
     );
   }
 }
 
-class _TurbidityHistoryView extends StatelessWidget {
-  const _TurbidityHistoryView();
+class _TemperatureHistoryView extends StatelessWidget {
+  const _TemperatureHistoryView();
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.watch<TurbidityHistoryProvider>();
+    final provider = context.watch<TemperatureHistoryProvider>();
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Turbidity History',
+          'Temperature History',
           overflow: TextOverflow.ellipsis,
           style: textTheme.titleMedium?.copyWith(
             fontSize: 30,
@@ -44,7 +44,7 @@ class _TurbidityHistoryView extends StatelessWidget {
     );
   }
 
-  Widget _buildBody(BuildContext context, TurbidityHistoryProvider provider) {
+  Widget _buildBody(BuildContext context, TemperatureHistoryProvider provider) {
     if (provider.isLoading) {
       return const Center(child: CircularProgressIndicator());
     }
@@ -65,7 +65,7 @@ class _TurbidityHistoryView extends StatelessWidget {
             SizedBox(height: 180),
             CustomedNoHistoryLogo(),
             SizedBox(height: 20),
-            Center(child: Text('No turbidity history available.')),
+            Center(child: Text('No temperature history available.')),
           ],
         ),
       );
@@ -73,11 +73,11 @@ class _TurbidityHistoryView extends StatelessWidget {
 
     return Column(
       children: [
-        TurbidityHistoryPieChart(history: provider.history),
+        TemperatureHistoryPieChart(history: provider.history),
         Expanded(
           child: RefreshIndicator(
             onRefresh: provider.loadHistory,
-            child: TurbidityHistoryList(history: provider.history),
+            child: TemperatureHistoryList(history: provider.history),
           ),
         ),
       ],

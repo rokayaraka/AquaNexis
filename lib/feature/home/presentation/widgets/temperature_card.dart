@@ -2,13 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 import '../../../../app/app_colors.dart';
-import '../../../temperature/presentation/temperature_history_visualization.dart';
+import '../../../temperature/presentation/screens/temperature_history_visualization.dart';
 
 class TemperatureCard extends StatefulWidget {
-  const TemperatureCard({
-    super.key,
-    required this.temperature,
-  });
+  const TemperatureCard({super.key, required this.temperature});
   final double temperature;
   @override
   State<TemperatureCard> createState() => _TemperatureCardState();
@@ -22,47 +19,44 @@ class _TemperatureCardState extends State<TemperatureCard> {
       onTap: _onTap,
       child: Card(
         child: Center(
-          child:  Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CircularPercentIndicator(
-              radius: 50,
-              lineWidth: 12,
-              percent: (widget.temperature / 100).clamp(0.0, 1.0),
-              animation: true,
-              circularStrokeCap: CircularStrokeCap.round,
-              progressColor: Colors.cyan,
-              backgroundColor: Colors.transparent,
-              arcType: ArcType.FULL,
-              arcBackgroundColor: Colors.white24,
-              center:  Text(
-                "${widget.temperature.toStringAsFixed(1)} °C",
-                style: textTheme.labelLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                  color: AppColors.textColorDarkSecondary,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircularPercentIndicator(
+                radius: 50,
+                lineWidth: 12,
+                percent: (widget.temperature / 100).clamp(0.0, 1.0),
+                animation: true,
+                circularStrokeCap: CircularStrokeCap.round,
+                progressColor: Colors.cyan,
+                backgroundColor: Colors.transparent,
+                arcType: ArcType.FULL,
+                arcBackgroundColor: Colors.white24,
+                center: Text(
+                  "${widget.temperature.toStringAsFixed(1)} °C",
+                  style: textTheme.labelLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    color: AppColors.textColorDarkSecondary,
+                  ),
                 ),
               ),
-            ),
-            const Text(
-              "Temperature",
-              style: TextStyle(
-                color: Colors.cyan,
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
+              const Text(
+                "Temperature",
+                style: TextStyle(
+                  color: Colors.cyan,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-            ),
-          ],
-        ),
+            ],
+          ),
         ),
       ),
     );
   }
 
   void _onTap() {
-    Navigator.pushNamed(
-      context,
-      TemperatureHistoryVisualization.routeName,
-    );
+    Navigator.pushNamed(context, TemperatureHistoryVisualization.routeName);
   }
 }

@@ -2,36 +2,37 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../app/app_colors.dart';
-import '../provider/temperature_history_provider.dart';
-import '../widgets/temperature_history_list.dart';
-import '../widgets/temperature_history_pie_chart.dart';
+import '../../../shared/widgets/customed_no_history_logo.dart';
+import '../provider/ph_history_provider.dart';
+import '../widgets/ph_history_list.dart';
+import '../widgets/ph_history_pie_chart.dart';
 
-class TemperatureHistoryVisualization extends StatelessWidget {
-  const TemperatureHistoryVisualization({super.key});
+class PhHistoryVisualization extends StatelessWidget {
+  const PhHistoryVisualization({super.key});
 
-  static const String routeName = '/temperature-history-visualization';
+  static const String routeName = '/ph-history-visualization';
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => TemperatureHistoryProvider()..loadHistory(),
-      child: const _TemperatureHistoryView(),
+      create: (_) => PhHistoryProvider()..loadHistory(),
+      child: const _PhHistoryView(),
     );
   }
 }
 
-class _TemperatureHistoryView extends StatelessWidget {
-  const _TemperatureHistoryView();
+class _PhHistoryView extends StatelessWidget {
+  const _PhHistoryView();
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.watch<TemperatureHistoryProvider>();
+    final provider = context.watch<PhHistoryProvider>();
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Temperature History',
+          'pH History',
           overflow: TextOverflow.ellipsis,
           style: textTheme.titleMedium?.copyWith(
             fontSize: 30,
@@ -39,11 +40,11 @@ class _TemperatureHistoryView extends StatelessWidget {
           ),
         ),
       ),
-      body: SafeArea(child: _buildBody(context, provider)),
+      body: SafeArea(child: _buildBody(provider)),
     );
   }
 
-  Widget _buildBody(BuildContext context, TemperatureHistoryProvider provider) {
+  Widget _buildBody(PhHistoryProvider provider) {
     if (provider.isLoading) {
       return const Center(child: CircularProgressIndicator());
     }
@@ -62,7 +63,9 @@ class _TemperatureHistoryView extends StatelessWidget {
           physics: const AlwaysScrollableScrollPhysics(),
           children: const [
             SizedBox(height: 180),
-            Center(child: Text('No temperature history available.')),
+            CustomedNoHistoryLogo(),
+            SizedBox(height: 20),
+            Center(child: Text('No pH history available.')),
           ],
         ),
       );
@@ -70,11 +73,11 @@ class _TemperatureHistoryView extends StatelessWidget {
 
     return Column(
       children: [
-        TemperatureHistoryPieChart(history: provider.history),
+        PhHistoryPieChart(history: provider.history),
         Expanded(
           child: RefreshIndicator(
             onRefresh: provider.loadHistory,
-            child: TemperatureHistoryList(history: provider.history),
+            child: PhHistoryList(history: provider.history),
           ),
         ),
       ],

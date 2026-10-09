@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../app/app_colors.dart';
-import '../data/model/turbidity_history_model.dart';
+import '../../../../app/app_colors.dart';
+import '../../data/model/turbidity_history_model.dart';
 
 class TurbidityHistoryList extends StatelessWidget {
   const TurbidityHistoryList({required this.history, super.key});

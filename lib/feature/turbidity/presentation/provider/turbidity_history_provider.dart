@@ -1,12 +1,12 @@
 import 'package:flutter/foundation.dart';
 
-import '../../../app/urls.dart';
-import '../../../core/service/network_caller/network_caller.dart';
-import '../../../core/storage/auth_storage.dart';
-import '../data/model/temperature_history_model.dart';
+import '../../../../app/urls.dart';
+import '../../../../core/service/network_caller/network_caller.dart';
+import '../../../../core/storage/auth_storage.dart';
+import '../../data/model/turbidity_history_model.dart';
 
-class TemperatureHistoryProvider extends ChangeNotifier {
-  TemperatureHistoryProvider({NetworkCaller? networkCaller})
+class TurbidityHistoryProvider extends ChangeNotifier {
+  TurbidityHistoryProvider({NetworkCaller? networkCaller})
     : _networkCaller =
           networkCaller ??
           NetworkCaller(
@@ -22,11 +22,11 @@ class TemperatureHistoryProvider extends ChangeNotifier {
 
   final NetworkCaller _networkCaller;
 
-  List<TemperatureHistoryModel> _history = [];
+  List<TurbidityHistoryModel> _history = [];
   bool _isLoading = false;
   String? _errorMessage;
 
-  List<TemperatureHistoryModel> get history => _history;
+  List<TurbidityHistoryModel> get history => _history;
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
 
@@ -37,17 +37,13 @@ class TemperatureHistoryProvider extends ChangeNotifier {
 
     final token = AuthStorage.userData?.token;
     if (token == null || token.isEmpty) {
-      _setError('Please sign in to view temperature history.');
+      _setError('Please sign in to view turbidity history.');
       return;
     }
 
-    final response = await _networkCaller.getRequest(
-      Urls.temperatureHistoryUrl,
-    );
+    final response = await _networkCaller.getRequest(Urls.turbidityHistoryUrl);
     if (!response.isSuccess) {
-      _setError(
-        response.errorMessage ?? 'Unable to load temperature history.',
-      );
+      _setError(response.errorMessage ?? 'Unable to load turbidity history.');
       return;
     }
 
@@ -56,11 +52,11 @@ class TemperatureHistoryProvider extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     } on FormatException catch (error) {
-      _setError('Invalid temperature history data: ${error.message}');
+      _setError('Invalid turbidity history data: ${error.message}');
     }
   }
 
-  List<TemperatureHistoryModel> _parseHistory(dynamic body) {
+  List<TurbidityHistoryModel> _parseHistory(dynamic body) {
     final rawItems = body is List
         ? body
         : body is Map && body['results'] is List
@@ -72,9 +68,8 @@ class TemperatureHistoryProvider extends ChangeNotifier {
     return rawItems
         .whereType<Map>()
         .map(
-          (item) => TemperatureHistoryModel.fromJson(
-            Map<String, dynamic>.from(item),
-          ),
+          (item) =>
+              TurbidityHistoryModel.fromJson(Map<String, dynamic>.from(item)),
         )
         .toList();
   }

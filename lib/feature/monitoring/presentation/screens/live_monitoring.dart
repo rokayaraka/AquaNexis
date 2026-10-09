@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../app/app_colors.dart';
-import '../../widgets/video_message.dart';
+import '../widgets/video_message.dart';
 
 class LiveMonitoring extends StatefulWidget {
   const LiveMonitoring({super.key});

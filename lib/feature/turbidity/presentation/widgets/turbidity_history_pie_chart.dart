@@ -1,7 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
-import '../data/model/turbidity_history_model.dart';
+import '../../data/model/turbidity_history_model.dart';
 
 class TurbidityHistoryPieChart extends StatelessWidget {
   const TurbidityHistoryPieChart({required this.history, super.key});

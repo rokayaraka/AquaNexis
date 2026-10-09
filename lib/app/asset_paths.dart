@@ -5,5 +5,5 @@ class AssetPaths {
   static const String splashAnimationGif = 'assets/lottie/aquas.gif';
   static const String splashAnimationTgs = 'assets/lottie/aquas.tgs';
   static const String arthausFont = 'assets/fonts/Arthaus-Bold.ttf';
-
+  static const String historyIcon = 'assets/lottie/empty.json';
 }
