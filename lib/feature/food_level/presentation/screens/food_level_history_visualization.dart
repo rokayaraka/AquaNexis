@@ -4,36 +4,36 @@ import 'package:provider/provider.dart';
 import '../../../../app/app_colors.dart';
 import '../../../shared/widgets/customed_error_view.dart';
 import '../../../shared/widgets/customed_no_history_logo.dart';
-import '../provider/ph_history_provider.dart';
-import '../widgets/ph_history_list.dart';
-import '../widgets/ph_history_pie_chart.dart';
+import '../provider/food_level_history_provider.dart';
+import '../widgets/food_level_history_line_chart.dart';
+import '../widgets/food_level_history_list.dart';
 
-class PhHistoryVisualization extends StatelessWidget {
-  const PhHistoryVisualization({super.key});
+class FoodLevelHistoryVisualization extends StatelessWidget {
+  const FoodLevelHistoryVisualization({super.key});
 
-  static const String routeName = '/ph-history-visualization';
+  static const String routeName = '/food-level-history-visualization';
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => PhHistoryProvider()..loadHistory(),
-      child: const _PhHistoryView(),
+      create: (_) => FoodLevelHistoryProvider()..loadHistory(),
+      child: const _FoodLevelHistoryView(),
     );
   }
 }
 
-class _PhHistoryView extends StatelessWidget {
-  const _PhHistoryView();
+class _FoodLevelHistoryView extends StatelessWidget {
+  const _FoodLevelHistoryView();
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.watch<PhHistoryProvider>();
+    final provider = context.watch<FoodLevelHistoryProvider>();
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'pH History',
+          'Food Level History',
           overflow: TextOverflow.ellipsis,
           style: textTheme.titleMedium?.copyWith(
             fontSize: 30,
@@ -45,7 +45,7 @@ class _PhHistoryView extends StatelessWidget {
     );
   }
 
-  Widget _buildBody(PhHistoryProvider provider) {
+  Widget _buildBody(FoodLevelHistoryProvider provider) {
     if (provider.isLoading) {
       return const Center(child: CircularProgressIndicator());
     }
@@ -66,7 +66,7 @@ class _PhHistoryView extends StatelessWidget {
             SizedBox(height: 180),
             CustomedNoHistoryLogo(),
             SizedBox(height: 20),
-            Center(child: Text('No pH history available.')),
+            Center(child: Text('No food level history available.')),
           ],
         ),
       );
@@ -74,11 +74,11 @@ class _PhHistoryView extends StatelessWidget {
 
     return Column(
       children: [
-        PhHistoryPieChart(history: provider.history),
+        FoodLevelHistoryLineChart(history: provider.history),
         Expanded(
           child: RefreshIndicator(
             onRefresh: provider.loadHistory,
-            child: PhHistoryList(history: provider.history),
+            child: FoodLevelHistoryList(history: provider.history),
           ),
         ),
       ],

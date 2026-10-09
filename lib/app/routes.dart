@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../feature/auth/presentation/screens/scan_device_id_screen.dart';
 import '../feature/device_setup/presentation/screens/device_setup_screen.dart';
+import '../feature/food_level/presentation/screens/food_level_history_visualization.dart';
 import '../feature/home/presentation/screens/home_screen.dart';
 import '../feature/monitoring/presentation/screens/live_monitoring.dart';
 import '../feature/ph/presentation/screens/ph_history_visualization.dart';
@@ -28,6 +29,10 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const HomeScreen());
       case DeviceSetupScreen.routeName:
         return MaterialPageRoute(builder: (_) => const DeviceSetupScreen());
+      case FoodLevelHistoryVisualization.routeName:
+        return MaterialPageRoute(
+          builder: (_) => const FoodLevelHistoryVisualization(),
+        );
       case LiveMonitoring.routeName:
         return MaterialPageRoute(builder: (_) => const LiveMonitoring());
       case PhHistoryVisualization.routeName:

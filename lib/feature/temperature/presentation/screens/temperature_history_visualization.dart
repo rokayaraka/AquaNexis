@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../../app/app_colors.dart';
 import '../../../shared/widgets/customed_no_history_logo.dart';
+import '../../../shared/widgets/customed_error_view.dart';
 import '../provider/temperature_history_provider.dart';
 import '../widgets/temperature_history_list.dart';
 import '../widgets/temperature_history_pie_chart.dart';
@@ -50,7 +51,7 @@ class _TemperatureHistoryView extends StatelessWidget {
     }
 
     if (provider.errorMessage != null) {
-      return _ErrorView(
+      return CustomedErrorView(
         message: provider.errorMessage!,
         onRetry: provider.loadHistory,
       );
@@ -81,30 +82,6 @@ class _TemperatureHistoryView extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class _ErrorView extends StatelessWidget {
-  const _ErrorView({required this.message, required this.onRetry});
-
-  final String message;
-  final Future<void> Function() onRetry;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(message, textAlign: TextAlign.center),
-            const SizedBox(height: 12),
-            FilledButton(onPressed: onRetry, child: const Text('Retry')),
-          ],
-        ),
-      ),
     );
   }
 }
