@@ -2,6 +2,8 @@ import 'package:aqua_nexis/feature/auth/presentation/screens/sign_in_screen.dart
 import 'package:aqua_nexis/feature/auth/presentation/widgets/logo_animation.dart';
 import 'package:flutter/material.dart';
 import 'package:aqua_nexis/core/storage/auth_storage.dart';
+import 'package:lottie/lottie.dart';
+import '../../../../app/asset_paths.dart';
 import '../../../home/presentation/screens/home_screen.dart';
 import '../../../shared/widgets/customed_progress_indecator.dart';
 
@@ -28,19 +30,29 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Padding(
-          padding: const .all(12.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            spacing: 200,
-            children: [
-              Spacer(),
-              LogoAnimation(width: MediaQuery.of(context).size.width * .75),
-
-              CustomedProgressIndecator(),
-            ],
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(AssetPaths.splashImage),
+            fit: BoxFit.cover,
+            colorFilter: ColorFilter.mode(Colors.black87, BlendMode.darken),
+          ),
+        ),
+        child: Center(
+          child: Padding(
+            padding: const .all(12.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              // spacing: 200,
+              children: [
+                Spacer(),
+                Lottie.asset(AssetPaths.logo, width: 80, height: 80),
+                LogoAnimation(width: MediaQuery.of(context).size.width * .75),
+                Spacer(),
+                CustomedProgressIndecator(),
+              ],
+            ),
           ),
         ),
       ),
