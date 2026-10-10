@@ -32,6 +32,13 @@ class _FoodLevelHistoryView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
+        leadingWidth: 80,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new),
+          color: AppColors.textColorDarkSecondary,
+          onPressed: () => Navigator.pop(context),
+        ),
         title: Text(
           'Food Level History',
           overflow: TextOverflow.ellipsis,

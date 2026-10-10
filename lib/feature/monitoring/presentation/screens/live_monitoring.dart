@@ -21,6 +21,13 @@ class _LiveMonitoringState extends State<LiveMonitoring> {
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
+        leadingWidth: 80,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new),
+          color: AppColors.textColorDarkSecondary,
+          onPressed: () => Navigator.pop(context),
+        ),
         backgroundColor: Color(0xFF0C3035),
         title: Text(
           'Live Monitoring',
