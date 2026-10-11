@@ -1,7 +1,7 @@
 class Urls {
   //static const String baseUrl = "https://objectives-renewable-minority-drivers.trycloudflare.com";
   static const String baseUrl =
-      "https://jobs-exclusively-magic-trademark.trycloudflare.com";
+      "https://dependent-url-runtime-translations.trycloudflare.com";
   static const String loginUrl = "$baseUrl/api/login/";
   static const String registerUrl = "$baseUrl/api/register/";
   static const String temperatureHistoryUrl =
@@ -12,7 +12,7 @@ class Urls {
   static const String weightHistoryUrl =
       "$baseUrl/api/sensors/history/?field=weight";
   static String webSocketUrl(String deviceId, String tokenId) =>
-      'ws://jobs-exclusively-magic-trademark.trycloudflare.com/ws/device/$deviceId/'
+      'ws://dependent-url-runtime-translations.trycloudflare.com/ws/device/$deviceId/'
       '?role=viewer&token=$tokenId';
   // static String webSocketUrl(String deviceId, String tokenId) =>
   //     'ws://aquanexis-backend.onrender.com/ws/device/$deviceId/'
