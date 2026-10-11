@@ -1,6 +1,4 @@
-import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -11,12 +9,8 @@ import '../models/wifi_credentials.dart';
 class BleProvisioningService {
   static const String serviceUuid = '4fafc201-1fb5-459e-8fcc-c5c9c331914b';
   static const String provisionUuid = 'beb54850-36e1-4688-b7f5-ea07361b26b0';
-  static const String statusUuid = 'beb54841-36e1-4688-b7f5-ea07361b26a4';
 
   BluetoothCharacteristic? _provisionCharacteristic;
-  BluetoothCharacteristic? _statusCharacteristic;
-  StreamSubscription<List<int>>? _statusSubscription;
-  Completer<String?>? _statusResponseCompleter;
 
   Stream<List<ScanResult>> get scanResults => FlutterBluePlus.scanResults;
 
@@ -74,20 +68,10 @@ class BleProvisioningService {
       withoutResponse: true,
     );
 
-    final response = await _waitForStatusResponse(
-      timeout: const Duration(seconds: 20),
-    );
-    if (response == null) {
-      throw TimeoutException('The device did not confirm the Wi-Fi setup.');
-    }
-    if (!response.toLowerCase().contains('success')) {
-      throw StateError('The device reported a Wi-Fi connection failure.');
-    }
   }
 
   Future<void> _discoverServices(BluetoothDevice device) async {
     _provisionCharacteristic = null;
-    _statusCharacteristic = null;
 
     final services = await device.discoverServices();
     for (final service in services) {
@@ -97,39 +81,10 @@ class BleProvisioningService {
         final uuid = characteristic.uuid.toString().toLowerCase();
         if (uuid == provisionUuid) {
           _provisionCharacteristic = characteristic;
-        } else if (uuid == statusUuid) {
-          _statusCharacteristic = characteristic;
-          await characteristic.setNotifyValue(true);
-          await _statusSubscription?.cancel();
-          _statusSubscription = characteristic.onValueReceived.listen((value) {
-            final response = utf8.decode(value).trim();
-            log('Device status response: $response');
-            final completer = _statusResponseCompleter;
-            if (completer != null && !completer.isCompleted) {
-              completer.complete(response);
-            }
-          });
         }
       }
     }
   }
 
-  Future<String?> _waitForStatusResponse({required Duration timeout}) async {
-    if (_statusCharacteristic == null) return null;
-
-    _statusResponseCompleter = Completer<String?>();
-    try {
-      return await _statusResponseCompleter!.future.timeout(
-        timeout,
-        onTimeout: () => null,
-      );
-    } finally {
-      _statusResponseCompleter = null;
-    }
-  }
-
-  Future<void> dispose() async {
-    await _statusSubscription?.cancel();
-    _statusResponseCompleter = null;
-  }
+  Future<void> dispose() async {}
 }

@@ -3,6 +3,7 @@ import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../app/app_colors.dart';
+import '../../../home/presentation/providers/sensor_provider.dart';
 import '../../data/models/wifi_credentials.dart';
 import '../providers/device_setup_provider.dart';
 import '../widgets/aqua_nexis_wifi_connection.dart';
@@ -16,7 +17,8 @@ class DeviceSetupScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => DeviceSetupProvider(),
+      create: (context) =>
+          DeviceSetupProvider(sensorProvider: context.read<SensorProvider>()),
       child: const _DeviceSetupView(),
     );
   }
@@ -64,7 +66,7 @@ class _DeviceSetupView extends StatelessWidget {
               const SizedBox(height: 16),
               _StatusCard(
                 message: provider.statusMessage,
-                isScanning: provider.isScanning,
+                isBusy: provider.isScanning || provider.isProvisioning,
                 onRefresh: provider.startScan,
               ),
               const SizedBox(height: 16),
@@ -91,10 +93,20 @@ class _DeviceSetupView extends StatelessWidget {
                 ),
               const SizedBox(height: 24),
               FilledButton.icon(
-                onPressed: provider.isScanning ? null : provider.startScan,
-                icon: Icon(provider.isScanning ? Icons.sync : Icons.search),
+                onPressed: provider.isScanning || provider.isProvisioning
+                    ? null
+                    : provider.startScan,
+                icon: Icon(
+                  provider.isScanning || provider.isProvisioning
+                      ? Icons.sync
+                      : Icons.search,
+                ),
                 label: Text(
-                  provider.isScanning ? 'Scanning...' : 'Scan devices',
+                  provider.isScanning
+                      ? 'Scanning...'
+                      : provider.isProvisioning
+                      ? 'Setting up...'
+                      : 'Scan devices',
                 ),
               ),
             ],
@@ -124,12 +136,12 @@ class _DeviceSetupView extends StatelessWidget {
 class _StatusCard extends StatelessWidget {
   const _StatusCard({
     required this.message,
-    required this.isScanning,
+    required this.isBusy,
     required this.onRefresh,
   });
 
   final String message;
-  final bool isScanning;
+  final bool isBusy;
   final Future<void> Function() onRefresh;
 
   @override
@@ -142,14 +154,14 @@ class _StatusCard extends StatelessWidget {
             SizedBox(
               height: 24,
               width: 24,
-              child: isScanning
+              child: isBusy
                   ? const CircularProgressIndicator(strokeWidth: 2)
                   : const Icon(Icons.info_outline),
             ),
             const SizedBox(width: 12),
             Expanded(child: Text(message)),
             TextButton(
-              onPressed: isScanning ? null : onRefresh,
+              onPressed: isBusy ? null : onRefresh,
               child: const Text('Refresh'),
             ),
           ],

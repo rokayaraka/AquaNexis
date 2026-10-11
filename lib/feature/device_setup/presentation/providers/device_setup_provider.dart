@@ -2,27 +2,35 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
+import '../../../home/presentation/providers/sensor_provider.dart';
 import '../../data/models/wifi_credentials.dart';
 import '../../data/services/ble_provisioning_service.dart';
 
 class DeviceSetupProvider extends ChangeNotifier {
-  DeviceSetupProvider({BleProvisioningService? service})
-    : _service = service ?? BleProvisioningService() {
+  DeviceSetupProvider({
+    BleProvisioningService? service,
+    required SensorProvider sensorProvider,
+  }) : _service = service ?? BleProvisioningService(),
+       _sensorProvider = sensorProvider {
     _scanSubscription = _service.scanResults.listen(_onScanResults);
   }
 
   final BleProvisioningService _service;
+  final SensorProvider _sensorProvider;
   StreamSubscription<List<ScanResult>>? _scanSubscription;
   final List<ScanResult> _scanResults = [];
   bool _isScanning = false;
+  bool _isProvisioning = false;
   DateTime? _lastScanStartedAt;
   String _statusMessage =
       'Tap Scan devices to discover nearby BLE peripherals.';
 
   List<ScanResult> get scanResults => List.unmodifiable(_scanResults);
   bool get isScanning => _isScanning;
+  bool get isProvisioning => _isProvisioning;
   String get statusMessage => _statusMessage;
 
   Future<void> startScan() async {
@@ -69,13 +77,25 @@ class DeviceSetupProvider extends ChangeNotifier {
     BluetoothDevice device,
     WifiCredentials credentials,
   ) async {
+    _isProvisioning = true;
     _setStatus('Sending Wi-Fi credentials to the device...');
     try {
       await _service.provision(device, credentials);
-      _setStatus('Device connected to the Wi-Fi successfully.');
+
+      _setStatus('Waiting for the device to connect to Wi-Fi...');
+      await Future<void>.delayed(const Duration(seconds: 20));
+
+      if (_sensorProvider.status.toLowerCase() == 'online') {
+        _setStatus('🟡 Device connected to the Wi-Fi successfully.');
+      } else {
+        _setStatus('🔴 Wi-Fi connection failure.');
+      }
     } catch (error) {
       log('Device provisioning failed: $error');
       _setStatus('Device setup failed: $error');
+    } finally {
+      _isProvisioning = false;
+      notifyListeners();
     }
   }
 
