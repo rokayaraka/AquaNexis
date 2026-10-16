@@ -81,7 +81,9 @@ class _HomeScreenState extends State<HomeScreen> {
               const PhCard(),
               TurbidityCard(turbidity: sensor.turbidityVoltage ?? 0.0),
               TemperatureCard(temperature: sensor.temperature ?? 0.0),
-              const FoodLevelCard(),
+              FoodLevelCard(
+                foodLevel: sensor.weight ?? 0.0,
+              ), // Replace with actual food level data
               const MonitorCard(),
               DeviceSetupCard(deviceStatus: sensor.status == 'online'),
               const FeedingCard(),

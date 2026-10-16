@@ -20,6 +20,7 @@ class SensorProvider extends ChangeNotifier {
   double? temperature;
   double? turbidityRaw;
   double? turbidityVoltage;
+  double? weight;
 
   void disconnect() {
     _webSocketService.disconnect();
@@ -52,6 +53,7 @@ class SensorProvider extends ChangeNotifier {
           'WebSocket sensor data: ${data['turbidity_raw'].toString()}',
           name: 'SensorProvider',
         );
+        weight = _parseDouble(data['weight_grams']) ?? weight;
         temperature = _parseDouble(data['temperature']) ?? temperature;
         turbidityRaw =
             _parseDouble(data['turbidity_raw'] ?? data['turbidityRaw']) ??
