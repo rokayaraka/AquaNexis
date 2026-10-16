@@ -21,6 +21,7 @@ class SensorProvider extends ChangeNotifier {
   double? turbidityRaw;
   double? turbidityVoltage;
   double? weight;
+  double? pH;
 
   void disconnect() {
     _webSocketService.disconnect();
@@ -63,6 +64,7 @@ class SensorProvider extends ChangeNotifier {
               data['turbidity_voltage'] ?? data['turbidityVoltage'],
             ) ??
             turbidityVoltage;
+        pH = _parseDouble(data['ph']) ?? pH;
       }
 
       notifyListeners();

@@ -78,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
               childAspectRatio: 1.0,
             ),
             children: [
-              const PhCard(),
+              PhCard(pH: sensor.pH ?? 0.0),
               TurbidityCard(turbidity: sensor.turbidityVoltage ?? 0.0),
               TemperatureCard(temperature: sensor.temperature ?? 0.0),
               FoodLevelCard(

@@ -48,7 +48,7 @@ class _FoodLevelCardState extends State<FoodLevelCard> {
                 arcType: ArcType.FULL,
                 arcBackgroundColor: Colors.white24,
                 center: Text(
-                  "${widget.foodLevel.toStringAsFixed(1)} gm",
+                  widget.foodLevel.toStringAsFixed(1),
                   style: textTheme.labelLarge?.copyWith(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
@@ -57,7 +57,7 @@ class _FoodLevelCardState extends State<FoodLevelCard> {
                 ),
               ),
               const Text(
-                "Food Level",
+                "Food Level(gm)",
                 style: TextStyle(
                   color: Colors.cyan,
                   fontSize: 20,

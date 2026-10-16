@@ -5,8 +5,8 @@ import '../../../../app/app_colors.dart';
 import '../../../ph/presentation/screens/ph_history_visualization.dart';
 
 class PhCard extends StatefulWidget {
-  const PhCard({super.key});
-
+  const PhCard({super.key, required this.pH});
+  final double? pH;
   @override
   State<PhCard> createState() => _PhCardState();
 }
@@ -25,7 +25,7 @@ class _PhCardState extends State<PhCard> {
               CircularPercentIndicator(
                 radius: 50,
                 lineWidth: 12,
-                percent: 0.5,
+                percent: widget.pH != null ? (widget.pH!) / (14.0) : 0.5,
                 animation: true,
                 circularStrokeCap: CircularStrokeCap.round,
                 progressColor: Colors.cyan,
@@ -33,7 +33,7 @@ class _PhCardState extends State<PhCard> {
                 arcType: ArcType.FULL,
                 arcBackgroundColor: Colors.white24,
                 center: Text(
-                  "50",
+                  widget.pH != null ? widget.pH!.toStringAsFixed(1) : '0',
                   style: textTheme.labelLarge?.copyWith(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
