@@ -1,7 +1,7 @@
 class Urls {
   //static const String baseUrl = "https://objectives-renewable-minority-drivers.trycloudflare.com";
   static const String baseUrl =
-      "https://liberal-julie-instant-pastor.trycloudflare.com";
+      "https://evaluated-are-declined-wrapping.trycloudflare.com";
   static const String loginUrl = "$baseUrl/api/login/";
   static const String registerUrl = "$baseUrl/api/register/";
   static const String temperatureHistoryUrl =
@@ -12,11 +12,12 @@ class Urls {
   static const String weightHistoryUrl =
       "$baseUrl/api/sensors/history/?field=weight";
   static String webSocketUrl(String deviceId, String tokenId) =>
-      'ws://liberal-julie-instant-pastor.trycloudflare.com/ws/device/$deviceId/'
+      '${Urls.getBaseSocketUrl()}/ws/device/$deviceId/'
       '?role=viewer&token=$tokenId';
   // static String webSocketUrl(String deviceId, String tokenId) =>
   //     'ws://aquanexis-backend.onrender.com/ws/device/$deviceId/'
   //     '?role=viewer&token=$tokenId';
+  static String getBaseSocketUrl() => baseUrl.replaceFirst('https', 'ws');
 }
 
 //test urls:"http://192.168.0.113:8080"

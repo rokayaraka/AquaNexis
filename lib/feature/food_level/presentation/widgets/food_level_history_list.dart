@@ -26,7 +26,7 @@ class FoodLevelHistoryList extends StatelessWidget {
                 child: Icon(Icons.restaurant, color: AppColors.themeColorDark),
               ),
               title: Text(
-                '${item.weight.toStringAsFixed(1)} g',
+                '${item.weight.toStringAsFixed(1)} gm',
                 style: textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
