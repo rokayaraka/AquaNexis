@@ -32,9 +32,7 @@ class AppTheme {
         color: AppColors.textColorLight,
       ),
     ),
-    iconTheme: const IconThemeData(
-      color: AppColors.textColorLight,
-    ),
+    iconTheme: const IconThemeData(color: AppColors.textColorLight),
     textTheme: const TextTheme(
       titleLarge: TextStyle(
         color: AppColors.textColorLight,
@@ -87,36 +85,32 @@ class AppTheme {
       style: TextButton.styleFrom(
         padding: const EdgeInsets.all(0),
         foregroundColor: AppColors.errorColor,
-        textStyle: TextStyle(
-          fontSize: AppConstaints.bodyMedium,
-        ),
+        textStyle: TextStyle(fontSize: AppConstaints.bodyMedium),
       ),
     ),
     inputDecorationTheme: _inputDecorationThemeLight,
     filledButtonTheme: _filledButtonThemeLight,
   );
 
-  static final FilledButtonThemeData _filledButtonThemeLight= FilledButtonThemeData(
-    style:FilledButton.styleFrom(
-      backgroundColor: AppColors.buttonColorLight,
-      padding: const EdgeInsets.all(10),
-      fixedSize: Size.fromWidth(double.maxFinite),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(5),
-      ),
-    ),
-  );
- static final FilledButtonThemeData _filledButtonThemeDark= FilledButtonThemeData(
-    style:FilledButton.styleFrom(
-      backgroundColor: AppColors.buttonColorDark,
-      padding: const EdgeInsets.all(10),
-      foregroundColor: Colors.white,
-      fixedSize: Size.fromWidth(double.maxFinite),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(5),
-      ),
-    ),
-  );
+  static final FilledButtonThemeData _filledButtonThemeLight =
+      FilledButtonThemeData(
+        style: FilledButton.styleFrom(
+          backgroundColor: AppColors.buttonColorLight,
+          padding: const EdgeInsets.all(10),
+          fixedSize: Size.fromWidth(double.maxFinite),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+        ),
+      );
+  static final FilledButtonThemeData _filledButtonThemeDark =
+      FilledButtonThemeData(
+        style: FilledButton.styleFrom(
+          backgroundColor: AppColors.buttonColorDark,
+          padding: const EdgeInsets.all(10),
+          foregroundColor: Colors.white,
+          fixedSize: Size.fromWidth(double.maxFinite),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+        ),
+      );
   static final ThemeData _darkThemeData = ThemeData(
     fontFamily: 'Arthaus',
     colorSchemeSeed: AppColors.themeColorDark,
@@ -148,15 +142,12 @@ class AppTheme {
       style: TextButton.styleFrom(
         padding: const EdgeInsets.all(0),
         foregroundColor: AppColors.textColorDarkSecondary,
-        textStyle: TextStyle(
-          fontSize: AppConstaints.bodyMedium,
-          
-        ),
+        textStyle: TextStyle(fontSize: AppConstaints.bodyMedium),
       ),
     ),
     iconButtonTheme: const IconButtonThemeData(
       style: ButtonStyle(
-        iconColor: MaterialStatePropertyAll<Color>(AppColors.textColorDark),
+        iconColor: WidgetStatePropertyAll<Color>(AppColors.textColorDark),
       ),
     ),
     textTheme: const TextTheme(

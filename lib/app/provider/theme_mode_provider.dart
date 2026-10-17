@@ -2,32 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeModeProvider extends ChangeNotifier {
-   ThemeMode _currentThemeMode = ThemeMode.dark;
+  ThemeMode _currentThemeMode = ThemeMode.dark;
 
-   ThemeMode get themeMode => _currentThemeMode;
+  ThemeMode get themeMode => _currentThemeMode;
 
-   void changeThemeMode(ThemeMode mode) {
-     _currentThemeMode = mode;
-     _saveThemeMode(mode);
-     print('Theme mode changed to: ${mode.name}');
-     notifyListeners();
-   }
+  void changeThemeMode(ThemeMode mode) {
+    _currentThemeMode = mode;
+    _saveThemeMode(mode);
+    //  print('Theme mode changed to: ${mode.name}');
+    notifyListeners();
+  }
 
-   Future<void> _saveThemeMode(ThemeMode mode) async{
+  Future<void> _saveThemeMode(ThemeMode mode) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     await sharedPreferences.setString('themeMode', mode.name);
-   }
-   Future<void> setDefaultThemeMode() async{
+  }
+
+  Future<void> setDefaultThemeMode() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    String? themeMode =   sharedPreferences.getString('themeMode');
+    String? themeMode = sharedPreferences.getString('themeMode');
     if (themeMode != null) {
-      print('Retrieved theme mode from SharedPreferences: $themeMode');
+      // print('Retrieved theme mode from SharedPreferences: $themeMode');
       _currentThemeMode = _parseThemeMode(themeMode);
       notifyListeners();
     }
-   }
+  }
 
-   ThemeMode _parseThemeMode(String themeMode) {
+  ThemeMode _parseThemeMode(String themeMode) {
     switch (themeMode) {
       case 'light':
         return ThemeMode.light;
@@ -36,6 +37,5 @@ class ThemeModeProvider extends ChangeNotifier {
       default:
         return ThemeMode.dark;
     }
-
- }
- }
+  }
+}
