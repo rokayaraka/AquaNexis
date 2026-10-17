@@ -12,5 +12,5 @@ class AppColors {
   static const Color buttonColorLight = Color.fromARGB(255, 127, 250, 189);
   static const Color cardColorDark = Color(0xFF1A4B52);
   static const Color cardColorLight = Color.fromARGB(255, 172, 170, 170);
-
+  static const Color backgroundColorDark = Colors.black87;
 }

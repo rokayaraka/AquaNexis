@@ -125,14 +125,15 @@ class AppTheme {
       color: AppColors.themeColorDark,
     ),
     cardTheme: CardThemeData(
-      color: AppColors.cardColorDark,
+      color: AppColors.cardColorDark.withValues(alpha: 0.2),
       shadowColor: AppColors.cardColorLight,
       elevation: 4,
     ),
     brightness: Brightness.dark,
     scaffoldBackgroundColor: AppColors.themeColorDark,
     appBarTheme: AppBarTheme(
-      backgroundColor: AppColors.themeColorDark,
+      backgroundColor: AppColors.themeColorDark.withValues(alpha: 0.2),
+      elevation: 0.3,
       titleTextStyle: TextStyle(
         fontSize: AppConstaints.titleLarge,
         color: AppColors.textColorDark,

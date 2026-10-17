@@ -3,6 +3,7 @@ import 'package:aqua_nexis/feature/auth/presentation/widgets/logo_animation.dart
 import 'package:flutter/material.dart';
 import 'package:aqua_nexis/core/storage/auth_storage.dart';
 import 'package:lottie/lottie.dart';
+import '../../../../app/app_colors.dart';
 import '../../../../app/asset_paths.dart';
 import '../../../home/presentation/screens/home_screen.dart';
 import '../../../shared/widgets/customed_progress_indecator.dart';
@@ -35,7 +36,10 @@ class _SplashScreenState extends State<SplashScreen> {
           image: DecorationImage(
             image: AssetImage(AssetPaths.splashImage),
             fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(Colors.black87, BlendMode.darken),
+            colorFilter: ColorFilter.mode(
+              AppColors.backgroundColorDark,
+              BlendMode.darken,
+            ),
           ),
         ),
         child: Center(
