@@ -44,7 +44,7 @@ dependencies:
   animated_text_kit: ^4.3.0
   firebase_core: ^4.12.1
   firebase_crashlytics: ^5.2.6
-  firebase_auth: ^6.5.6
+  firebase_auth: ^6.7.1
   percent_indicator: ^4.2.5
   webview_flutter: ^4.14.1
   network_info_plus: ^8.2.1
@@ -54,6 +54,8 @@ dependencies:
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   fl_chart: ^1.2.0
+  firebase_messaging: ^16.7.1
+  flutter_local_notifications: ^22.3.3
   # wifi_connector: ^2.0.0
 
 

@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 import '../../../../app/urls.dart';
+import '../../../../core/service/alert_notification/notification_services.dart';
 import '../../../../core/service/network_caller/network_caller.dart';
 import '../../../../core/storage/auth_storage.dart';
 import '../../data/models/user_data_model.dart';
@@ -52,6 +53,7 @@ class SignInProvider extends ChangeNotifier {
           Map<String, dynamic>.from(responseBody),
         );
         await AuthStorage.saveUserData(userData);
+        await NotificationService().initialize();
       }
     }
     notifyListeners();

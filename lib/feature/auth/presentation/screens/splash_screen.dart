@@ -19,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(milliseconds: 4500), () {
+    Future.delayed(const Duration(milliseconds: 4600), () {
       if (!mounted) return;
       final destination = AuthStorage.hasUserData
           ? HomeScreen.routeName

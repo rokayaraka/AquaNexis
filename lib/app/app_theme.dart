@@ -125,7 +125,7 @@ class AppTheme {
       color: AppColors.themeColorDark,
     ),
     cardTheme: CardThemeData(
-      color: AppColors.cardColorDark.withValues(alpha: 0.2),
+      color: AppColors.cardColorDark,
       shadowColor: AppColors.cardColorLight,
       elevation: 4,
     ),

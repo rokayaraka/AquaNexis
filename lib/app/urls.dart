@@ -1,7 +1,7 @@
 class Urls {
   //static const String baseUrl = "https://objectives-renewable-minority-drivers.trycloudflare.com";
   static const String baseUrl =
-      "https://evaluated-are-declined-wrapping.trycloudflare.com";
+      "https://dir-stones-keep-mumbai.trycloudflare.com";
   static const String loginUrl = "$baseUrl/api/login/";
   static const String registerUrl = "$baseUrl/api/register/";
   static const String temperatureHistoryUrl =
@@ -18,6 +18,8 @@ class Urls {
   //     'ws://aquanexis-backend.onrender.com/ws/device/$deviceId/'
   //     '?role=viewer&token=$tokenId';
   static String getBaseSocketUrl() => baseUrl.replaceFirst('https', 'ws');
+  static String firebaseFCMregisterUrl =
+      "$baseUrl/api/notifications/devices/register/";
 }
 
 //test urls:"http://192.168.0.113:8080"
